@@ -23,7 +23,7 @@ services:
       GUNICORN_PRELOAD_APP: "true"
       GUNICORN_WORKER_TMP_DIR: /dev/shm
       GUNICORN_LOG_LEVEL: info
-      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173,http://localhost:8080,http://127.0.0.1:8080}
       REDIS_URL: redis://redis:6379/0
     ports:
       - "5000:5000"
