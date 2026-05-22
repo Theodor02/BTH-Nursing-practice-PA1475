@@ -7,7 +7,7 @@ cd "$PROJECT_DIR"
 
 echo "Rensar och bygger om från noll..."
 docker compose down -v
-docker compose up -d --build
+docker compose -f docker-compose.prod.yml up --build
 
 echo "Väntar på Postgres..."
 sleep 15

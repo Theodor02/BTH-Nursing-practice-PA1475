@@ -35,7 +35,7 @@ echo "Hämtar senaste ändringarna från Git..."
 git pull
 
 echo "Bygger om containrar..."
-docker compose up -d --build
+docker compose -f docker-compose.prod.yml up --build
 
 echo "Rensar gamla images..."
 docker image prune -f
