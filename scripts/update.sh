@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Konfiguration
-PROJECT_DIR="/home/fokuspi/fokuslokus"
+PROJECT_DIR="/home/bth/NursingPractice/BTH-Nursing-practice-PA1475"
 BACKUP_DIR="$PROJECT_DIR/backups"
 LOG_DIR="$PROJECT_DIR/logs/update_logs"
 DATE=$(date +"%Y-%m-%d_%H-%M-%S")
@@ -9,7 +9,7 @@ DATE=$(date +"%Y-%m-%d_%H-%M-%S")
 # Databas variabler
 DB_USER="qtrain"
 DB_NAME="qtrain"
-DB_CONTAINER="fokuslokus-db-1"
+DB_CONTAINER="bth-nursing-practice-pa1475-db-1"
 
 # Skapa mappar ifall de inte finns
 mkdir -p "$BACKUP_DIR"

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 URL="http://localhost:8080"
-PROJECT_DIR="/home/fokuspi/fokuslokus"
+PROJECT_DIR="/home/bth/NursingPractice/BTH-Nursing-practice-PA1475"
 RESTORE_SCRIPT="$PROJECT_DIR/scripts/restore.sh"
 LOG_FILE="$PROJECT_DIR/logs/health_log_$(date +"%Y-%m-%d_%H-%M-%S").txt"
 
