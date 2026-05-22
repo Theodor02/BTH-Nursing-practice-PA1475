@@ -35,7 +35,10 @@ echo "Hämtar senaste ändringarna från Git..."
 git pull
 
 echo "Bygger om containrar..."
-docker compose -f docker-compose.prod.yml up --build
+docker compose -f docker-compose.prod.yml up -d --build
+
+echo "Startar om nginx för att uppdatera DNS..."
+docker compose -f docker-compose.prod.yml restart nginx
 
 echo "Rensar gamla images..."
 docker image prune -f
