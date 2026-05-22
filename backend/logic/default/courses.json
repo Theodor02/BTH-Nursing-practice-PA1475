@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "course_code": "KM1423",
+    "name": "Mikrobiologi, farmakologi och näringslära",
+    "history": {}
+  },
+  {
+    "id": 2,
+    "course_code": "KM1424",
+    "name": "Patofysiologi I",
+    "history": {}
+  },
+  {
+    "id": 3,
+    "course_code": "KM1425",
+    "name": "Patofysiologi II",
+    "history": {}
+  },
+  {
+    "id": 4,
+    "course_code": "OM1541",
+    "name": "Omvårdnad vid akuta situationer och komplexa ohälsotillstånd",
+    "history": {}
+  }
+]

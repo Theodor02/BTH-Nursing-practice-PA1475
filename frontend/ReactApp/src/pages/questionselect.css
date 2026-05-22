@@ -1,0 +1,512 @@
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+.form{
+  height: 100%;
+  width: clamp(280px, 96%, 1400px);
+  margin-top: 2vh;
+  display: flex; 
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.maindiv-qs{
+  width: 100%;
+  height: 90vh;
+  min-height: 90dvh;
+  padding: 15px;
+  box-sizing: border-box;
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+}
+
+.maindiv-qs form{
+  width: 100%;
+  height: 100%;
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.course-selection {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+}
+
+.course-selection-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.multiselect{
+  width: max(30%, 150px);
+}
+
+.multiselect span{
+  color: var(--accent-soft);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.multiselect input{
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.multiselect li{
+  color: var(--accent-soft);
+  font-weight: 700;
+}
+
+/*Styling for the multi-select component */
+.rmsc{
+  --rmsc-main: var(--selected-option) !important;
+  --rmsc-hover: var(--card-bg) !important;
+  --rmsc-selected: var(--selected-option) !important;
+  --rmsc-border: var(--accent) !important;
+  --rmsc-gray: var(--accent-soft) !important;
+  --rmsc-bg: var(--accent) !important;
+  --rmsc-p: 10px !important;
+  --rmsc-radius: 20px !important;
+  --rmsc-h: 38px !important;
+  cursor: pointer;
+}
+
+.dropdown-heading{
+  cursor: pointer !important;
+}
+
+.course-selection p {
+  font-size: clamp(0.1rem, 1vw, 1.5rem);
+  color: var(--text-secondary);
+}
+
+.course-selection h1 {
+  font-size: clamp(1rem, 2vw, 1.6rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.3rem;
+}
+
+.course-grid{
+  display: flex;
+  flex-direction: row;
+  gap: clamp(0.5rem, 2vw, 1rem);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  padding: clamp(0.3rem, 1.5vw, 0.5rem);
+  margin-top: clamp(1rem, 3vw, 2rem);
+  border-right: 2px solid var(--panel);
+  border-left: 2px solid var(--secondary-panel);
+  border-radius: 30px;
+  background-color: rgba(0, 0, 0, 0.05);
+  overscroll-behavior: contain;
+  -webkit-user-select: none;
+  user-select: none;
+  height: 140px;
+}
+
+.course-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  align-items: flex-start;
+  flex: 1;
+}
+
+
+.course-card {
+  background: var(--card-bg);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: clamp(0.8rem, 2vw, 1rem);
+  box-shadow: 0px 3px 7px var(--box-shadow);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-shrink: 0;
+  width: clamp(220px, 50vw, 260px);
+  min-height: 100px;
+  transition: all 0.2s ease;
+}
+
+.course-card.selected {
+  border-color: var(--accent);
+  box-shadow: 0px 0px 10px var(--selected-option);
+}
+
+.course-card:hover {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  transform: translateY(-3px);
+  border-color: var(--accent-hover);
+}
+
+.course-card .course-code {
+  width: max-content;
+  font-size: 0.75rem; 
+  font-weight: 700; 
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-soft);
+  background: var(--accent);
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  display: inline-block;
+  margin-bottom: 0.6rem;
+}
+
+.course-card .course-name {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.course-card .course-qcount {
+  margin-top: auto;
+  font-size: 0.83rem;
+  padding-top: 0.25rem;
+  color: var(--text-secondary);
+}
+
+
+.course-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.category-select{
+  border: 2px solid var(--header-border);
+  height: auto;
+  width: 100%;
+  max-width: 850px;
+  background: var(--card-bg);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: 1vh;
+  margin-top: 2vh;
+  display: flex; 
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 3px 7px var(--box-shadow);
+}
+
+.category-select h3{
+  color: var(--text-primary);
+  margin-top: 15px;
+}
+
+.categories-grid {
+  width: 100%;
+  max-width: 900px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 50px;
+}
+
+.simple-data {
+  width: 90%; 
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(12px, 2vw, 16px);
+  margin-top: clamp(0.8rem, 1.5vh, 1rem);
+  margin-bottom: clamp(1rem, 2vh, 2rem);
+}
+
+.fast-start-buttons{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  max-width: 100%;
+}
+
+@media (max-width: 400px) {
+  .fast-start-buttons{
+    flex-direction: column;
+  }
+
+}
+
+@media (min-width: 700px) {
+  .simple-data {
+    grid-template-columns: 1fr 1fr; /* 2 columns */
+  }
+  .categories-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1100px) {
+  .simple-data {
+    grid-template-columns: 1fr 1fr 1fr; /* 3 columns */
+  }
+  .categories-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.stat-row {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.stat-name{
+  font-size: clamp(0.95rem, 2vw, 1.2rem) !important;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  height: 100%;
+}
+
+.stat-text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: clamp(1rem, 2vw, 1.2rem) !important;
+}
+
+.stat-numbers {
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+  gap: 4px;
+}
+
+.stat-current {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: clamp(1rem, 2vw, 1.2rem) !important;
+}
+
+.stat-divider {
+  color: var(--text-secondary);
+  font-weight: 400;
+  font-size: clamp(1rem, 2vw, 1.2rem) !important;
+}
+
+.stat-max {
+  color: var(--text-secondary);
+  font-weight: 400;
+  font-size: clamp(1rem, 2vw, 1.2rem) !important;
+}
+
+.stat-progress-bg {
+  width: 100%;
+  height: 6px;
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.stat-progress-fill {
+  height: 100%;
+  background-color: var(--accent); /* Kopplad till ditt färgtema */
+  border-radius: 999px;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Mjuk animation */
+}
+
+
+.radios-qs{
+  gap: 10px;
+  width: 100%;
+  display: flex; 
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.radios-qs input{
+  position: relative;
+  display: none;  
+}
+
+.radios-qs span {
+  width: 120px;
+  margin-top: 20px;
+  margin-bottom: -15px;
+  position: relative;
+  display: inline-flex;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  background-color: var(--accent);
+  color: var(--text-primary) !important;
+  border-radius: 30px;
+  font-size: 1rem !important;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  text-align: center; 
+
+}
+.radios-qs span img {
+  position: absolute;
+  height: 20px;
+  left: 3px;
+
+}
+
+.radios-qs input:checked + span {
+  position: relative;
+  z-index: 3;
+  border-color: var(--selected-option);
+  box-shadow: 0px 0px 5px var(--selected-option);
+  transform: scale(1.1);
+}
+
+.category{
+  height: clamp(30px, 5dvh, 150px);
+  width: 100%;
+  /* background: rgba(255,255,255,var(--alpha));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px); */
+  margin-bottom:3vh;
+  border-radius: 4vh;
+
+  display: flex; 
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* box-shadow: 0px 3px 7px var(--box-shadow); */
+  text-align: center;
+  color: var(--text-primary);
+  font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+
+}
+.category-input{
+  display: flex; 
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.category-input-simple{
+  width: 70%;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+    appearance: textfield;
+}
+
+.stat-text input[type=number]{
+  height: 100%;
+  width: 30px;
+  flex-shrink: 0;
+  padding: 2px;
+  margin-bottom: 2dvh;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.5);
+  color: var(--text-secondary);
+  border-radius: 5px;
+  border-color: var(--table-border);
+}
+
+.category input[type=number]{
+  display: block;
+  width: 30px;
+  flex-shrink: 0;
+  margin: 5px auto;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.5);
+  color: inherit;
+  border-radius: 5px;
+  border-color: var(--table-border);
+}
+
+.category-select span{
+  color: var(--text-primary);
+  font-size: clamp(1rem, 4vw, 2rem);
+  margin-bottom: 2dvh;
+}
+
+.course-select-input{
+  width:95% !important;
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+}
+
+.practicebutton{
+    width: clamp(250px, 70vw, 300px);
+    height: 8vh;
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-end; 
+    align-items: center;
+}
+
+/* MultiSelect Component Styling */
+.multi-select-container {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.multi-select-container input {
+  color: var(--text-primary);
+  background-color: var(--card-bg);
+}
+
+.multi-select-container input::placeholder {
+  color: var(--text-secondary);
+}
+
+.multi-select-dropdown {
+  background-color: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.multi-select-dropdown label {
+  color: var(--text-primary);
+  background-color: var(--panel);
+}
+
+.multi-select-dropdown label:hover {
+  background-color: var(--secondary-panel);
+}
+
+.multi-select-dropdown input[type="checkbox"] {
+  accent-color: var(--accent);
+}
+
+.multi-select-tag {
+  background-color: var(--accent);
+  color: var(--text-primary);
+  border-radius: 6px;
+}
+
+.multi-select-tag button {
+  color: var(--text-primary);
+}
+
+.multi-select-tag button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}

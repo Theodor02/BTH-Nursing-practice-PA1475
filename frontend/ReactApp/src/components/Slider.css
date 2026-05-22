@@ -1,0 +1,98 @@
+/* Base slider styling */
+.slider {
+    -webkit-appearance: none; /* remove default Chrome style */
+    -moz-appearance: none; /* remove default Firefox style */
+    width: 100%;
+    height: 10px;
+    margin: 10px auto;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    border: 1px solid var(--table-border);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+/* Track for Chromium */
+.slider::-webkit-slider-runnable-track {
+    height: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    border: 1px solid var(--table-border);
+}
+
+/* Thumb for Chromium */
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--accent);
+    border-radius: 50%;
+    border: 2px solid var(--table-border);
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+    margin-top: -5px; /* center thumb on track */
+}
+
+.slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    background: var(--button-hover);
+}
+
+/* Track for Firefox */
+.slider::-moz-range-track {
+    height: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    border: 1px solid var(--table-border);
+}
+
+/* Thumb for Firefox */
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--accent);
+    border-radius: 50%;
+    border: 2px solid var(--table-border);
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.slider::-moz-range-thumb:hover {
+    transform: scale(1.05);
+    background: var(--button-hover);
+}
+
+.slider::-ms-track {
+    width: 100%;
+    height: 10px;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+}
+
+.slider::-ms-fill-lower {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--table-border);
+    border-radius: 5px;
+}
+
+.slider::-ms-fill-upper {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--table-border);
+    border-radius: 5px;
+}
+
+.slider::-ms-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--button-hover);
+    border-radius: 50%;
+    border: 2px solid var(--table-border);
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.slider::-ms-thumb:hover {
+    transform: scale(1.1);
+    background: var(--button-hover);
+}

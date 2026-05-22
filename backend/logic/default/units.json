@@ -1,0 +1,95 @@
+[
+  {
+    "ml": [
+      "ml", "mL", "ML",
+      "milliliter", "millilitre",
+      "milliliters", "millilitres"
+    ],
+    "mg": [
+      "mg", "MG",
+      "milligram", "milligrams"
+    ],
+    "mmol": [
+      "mmol",
+      "millimol", "millimole", "millimoles"
+    ],
+    "g": [
+      "g", "G",
+      "gram", "grams"
+    ],
+    "kg": [
+      "kg", "KG",
+      "kilogram", "kilograms"
+    ],
+    "l": [
+      "l", "L",
+      "liter", "litre",
+      "liters", "litres"
+    ],
+    "min": [
+      "min", "MIN",
+      "mins",
+      "minute", "minutes",
+      "minut", "minuter"
+    ],
+    "h": [
+      "h", "H",
+      "hr", "hrs",
+      "hour", "hours",
+      "tim", "timme", "timmar"
+    ],
+    "kl": [
+      "kl", "KL",
+      "klockan", "klockslag", "klockslaget"
+    ],
+    "mg/ml": [
+      "mg/ml", "MG/ML",
+      "mg/mL", "MG/mL",
+      "mg per ml", "mg per mL",
+      "mg per milliliter", "mg per millilitre",
+      "milligram per milliliter", "milligram per millilitre",
+      "milligram/ml", "milligram/mL"
+    ],
+    "ampull": [
+      "ampull", "ampuller"
+    ],
+    "droppar/min": [
+      "droppar/min",
+      "dropp/min",
+      "drop/min",
+      "drops/min",
+      "drop/minute",
+      "drops/minute",
+      "drops per minute",
+      "drop per minute",
+      "droppar per minut",
+      "droppar/minut",
+      "droppar per min",
+      "gtt/min",
+      "gtts/min"
+    ],
+    "ml/h": [
+      "ml/h", "ML/H",
+      "mL/h", "mL/H",
+      "ml per h",
+      "ml per hour",
+      "ml per timme",
+      "milliliter per hour",
+      "milliliter per timme",
+      "ml/hour",
+      "ml/timme",
+      "mL/hour",
+      "mL per hour"
+    ],
+    "s": [
+      "s", "S",
+      "sek", "sekund", "sekunder",
+      "second", "seconds"
+    ],
+    "dag": [
+      "dag", "dagar",
+      "day", "days",
+      "d"
+    ]
+  }
+]

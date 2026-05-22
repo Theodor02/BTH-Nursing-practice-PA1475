@@ -1,0 +1,6 @@
+frontend/ReactApp/node_modules
+.git
+**/__pycache__/
+**/.pytest_cache/
+**/pytest-cache-files-*
+backend/pytest-cache-files-*

@@ -1,0 +1,187 @@
+/* Calculator  */
+
+.calculator {
+  background: var(--calc-bg);
+  border-radius: 16px;
+  box-shadow: 6px 6px 16px rgba(0, 0, 0, 0.3), -6px -6px 16px rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--calc-border);
+  padding: 1rem;
+  width: 100%;
+}
+
+.calc-display {
+  width: 100%;
+  text-align: right;
+  padding: clamp(0.5rem, 2vw, 1rem) clamp(0.6rem, 2.5vw, 1rem);
+  font-size: clamp(1rem, 3vw, 1.3rem);
+  font-weight: 700;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  background: var(--calc-display-bg);
+  color: var(--calc-btn-text);
+  border: 1px solid var(--calc-border);
+  border-radius: 12px;
+  margin-bottom: clamp(0.5rem, 1.5vw, 0.8rem);
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2), inset -4px -4px 8px rgba(255, 255, 255, 0.04);
+}
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+}
+
+.calc-btn {
+  padding: clamp(0.4rem, 2vw, 0.65rem);
+  font-size: clamp(0.75rem, 2vw, 0.95rem);
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--calc-btn-bg);
+  color: var(--calc-btn-text);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.calc-btn:hover {
+  background: var(--calc-btn-hover);
+  transform: translateY(-1px);
+}
+
+.calc-btn:active {
+  background: var(--calc-btn-bg);
+  transform: translateY(0);
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2), inset -4px -4px 8px rgba(255, 255, 255, 0.04);
+  transition-duration: 0.05s;
+}
+
+.calc-btn.calc-op {
+  background: var(--calc-op-bg);
+  color: var(--calc-op-color);
+}
+
+.calc-btn.calc-op:hover {
+  background: var(--button);
+  color: var(--calc-btn-text);
+}
+
+.calc-btn.calc-op:active {
+  background: var(--calc-op-bg);
+  color: var(--calc-op-color);
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2);
+  transition-duration: 0.05s;
+}
+
+.calc-btn.calc-eq {
+  background: var(--button);
+  color: var(--calc-btn-text);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--button) 40%, transparent);
+}
+
+.calc-btn.calc-eq:hover {
+  background: var(--button-hover);
+}
+
+.calc-btn.calc-eq:active {
+  background: var(--button);
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2);
+  transition-duration: 0.05s;
+}
+
+.calc-btn.calc-fn {
+  background: var(--button);
+  color: var(--calc-btn-text);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--button) 40%, transparent);
+}
+
+.calc-btn.calc-fn:hover {
+  background: var(--button-hover);
+}
+
+.calc-btn.calc-fn:active {
+  background: var(--button);
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2);
+  transition-duration: 0.05s;
+}
+
+.calc-header {
+  font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+  font-weight: 700;
+  color: var(--calc-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: clamp(0.4rem, 1vw, 0.6rem);
+  text-align: center;
+}
+
+/* Editable input display */
+.calc-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  text-align: right;
+  font-size: clamp(1rem, 3vw, 1.3rem);
+  font-weight: 700;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  color: var(--calc-btn-text);
+  caret-color: var(--button);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.calc-input::placeholder {
+  color: var(--calc-text-muted);
+  opacity: 0.5;
+}
+
+/* History rows */
+.calc-history {
+  max-height: 120px;
+  overflow-y: auto;
+  margin-bottom: 0.5rem;
+  padding: clamp(0.3rem, 1vw, 0.4rem) clamp(0.4rem, 1.5vw, 0.6rem);
+  background: var(--calc-display-bg);
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: clamp(0.65rem, 1.5vw, 0.78rem);
+}
+
+
+.calc-history-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.15rem 0;
+  color: var(--calc-text-muted);
+}
+
+.calc-hist-expr {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calc-hist-eq {
+  color: var(--button-hover);
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.calc-clear-history {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.3rem;
+  font-size: 0.72rem;
+  background: transparent;
+  border: 1px solid var(--calc-border);
+  border-radius: 8px;
+  color: var(--calc-text-muted);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.calc-clear-history:hover {
+  background: var(--calc-btn-bg);
+  color: var(--calc-btn-text);
+}

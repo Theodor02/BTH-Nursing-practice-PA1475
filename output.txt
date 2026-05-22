@@ -1,0 +1,157 @@
+dos-1: {name} har en övre urinvägsinfektion och är ordinerad Doktacillin. Tillgängligt preparat är Doktacillin pulver till injektions-/infusionsvätska, lösning. {name} är {age} år och ordineras Doktacillin som intravenös injektion. {name} väger {weight} kg. Ordinerad mängd är {dosePerKg} mg/kg kroppsvikt och dygn fördelat på {doses} doser. Varje dos blandas med {dilutionVol} ml vatten för injektionsvätskor.
+
+Hur många mg skall ges vid varje dostillfälle?
+dos-2: {name} har en övre urinvägsinfektion och är ordinerad Doktacillin. Tillgängligt preparat är Doktacillin pulver till injektions-/infusionsvätska, lösning. {name} är {age} år och ordineras Doktacillin som intravenös injektion. {name} väger {weight} kg. Ordinerad mängd är {dosePerKg} mg/kg kroppsvikt och dygn fördelat på {doses} doser. Varje dos blandas med {dilutionVol} ml vatten för injektionsvätskor.
+
+Hur många gram blir dygnsdosen?
+dos-3: {name} har en postoperativ sårinfektion. {name} ordineras infusion Dalacin {dose} mg x 3. I medicinskåpet finner du injektionsvätska Dalacin {concentration} mg/ml med {ampVolume} ml i varje ampull.
+
+Hur många ampuller behöver du använda vid ett dostillfälle?
+dos-4: Ett barn har fått en postoperativ sårinfektion. Barnet ordineras infusion Dalacin {dosePerKg} mg/kg och dygn fördelat på {doses} dostillfällen. Barnet väger {weight} kg.
+
+Hur många milligram motsvarar ett dostillfälle? Ange svaret i hela milligram.
+dos-5: {name} har en postoperativ sårinfektion. {name} ordineras infusion Dalacin {dose} mg x {frequency}. I medicinskåpet finner du injektionsvätska Dalacin {concentration} mg/ml med {ampVolume} ml i varje ampull.
+
+Vilken blir den totala dygnsdosen Dalacin som patienten får?
+dos-6: Ett barn har fått en postoperativ sårinfektion. Barnet ordineras infusion Dalacin {dosePerKg} mg/kg och dygn fördelat på {doses} dostillfällen. Barnet väger {weight} kg.
+
+Vilken blir den totala dygnsdosen Dalacin som patienten får? Ange svaret i gram.
+dos-7: {name} är ordinerad subcutan inj. Klexane {dose} E som trombosprofylax. Just idag finns bara tillgängligt inj. Klexane i ampuller med {totalUnits} E/{totalVolume} ml.
+
+Hur många ml ger du {name}?
+dos-8: {name} är ordinerad infusion Paracetamol. Tillgängligt finns Paracetamol infusionsvätska, lösning {concentration} mg/ml. {name}s vikt är {weight} kg och ska därför få {dosePerKg} mg/kg.
+
+Hur många mg får patienten?
+dos-9: {name} är ordinerad infusion Paracetamol. Tillgängligt finns Paracetamol infusionsvätska, lösning {concentration} mg/ml. {name}s vikt är {weight} kg och ska därför få {dosePerKg} mg/kg.
+
+Hur många ml får patienten?
+dos-10: Läkaren har ordinerat intramuskulär injektion Morfin {dose} mg x {frequency}. Tillgängligt finns Morfin injektionsvätska {concentration} mg/ml.
+
+Hur många ml motsvarar ett dostillfälle?
+dos-11: Läkaren har ordinerat intramuskulär injektion Morfin {dose} mg x {frequency}. Tillgängligt finns Morfin injektionsvätska {concentration} mg/ml.
+
+Hur många mg blir dygnsdosen?
+dos-12: {name} har kronisk bronkobstruktion och ordineras inhalation med Ventoline. Ventoline är ett bronkdilaterande medel vid astma och KOL som ges via nebulisator.
+
+Tillgängligt preparat: Ventoline, lösning för nebulisator {concentration} mg/ml.
+
+Hur många mg erhåller {name} om {volume} ml Ventoline ordineras?
+dos-13: {name} med illamående ordineras Droperidol. Tillgängligt preparat är Droperidol, injektionsvätska, lösning {concentration} mg/ml. Ampullen innehåller {ampVolume} ml.
+
+{name} ordineras {dose} mg. Hur många ml injektionsvätska motsvarar det?
+spadning-1: {name} har illamående och ordineras Droperidol. Tillgängligt preparat är Droperidol, injektionsvätska, lösning {concentration} mg/ml. Ampullen innehåller {ampVolume} ml.
+
+En ampull Droperidol skall spädas med NaCl 9 mg/ml till en ny styrka på {targetConc} mg/ml.
+
+Hur många ml spädningsvätska behövs?
+spadning-2: Vid en anafylaktisk chock ordineras {name} {dose} mg Adrenalin intravenöst. Innan ordinationen verkställs späds Adrenalin {concentration} mg/ml, {volume} ml, till en styrka på {targetConc} mg/ml.
+
+Hur många ml NaCl använder du för att uppnå önskad styrka?
+spadning-3: Vid en anafylaktisk chock ordineras {name} {dose} mg Adrenalin intravenöst. Innan ordinationen verkställs späds Adrenalin {concentration} mg/ml, {volume} ml, till en styrka på {targetConc} mg/ml.
+
+Hur många ml av den spädda lösningen ges till {name}?
+spadning-4: Vid en anafylaktisk chock ordineras {name} {dose} mg Adrenalin intravenöst. Innan ordinationen verkställs späds {volumeDrug} ml Adrenalin med styrkan {concentration} mg/ml med {volumeNaCl} ml NaCl 9 mg/ml.
+
+Vilken styrka får den spädda lösningen?
+spadning-5: {name} ordineras smärtlindring med Ultiva {dose} mg i torrsubstans som skall blandas med NaCl 9 mg/ml till en styrka av {targetConc} µg/ml.
+
+Hur många ml NaCl 9 mg/ml används?
+spadning-6: {name} har en postoperativ sårinfektion. {name} ordineras infusion Dalacin {dose} mg x 3. I medicinskåpet finner du injektionsvätska Dalacin {concentration} mg/ml. Dalacin ska spädas till en önskad styrka på {targetConc} mg/ml.
+
+Vilken blir den totala volymen efter spädning?
+spadning-7: {name} har en postoperativ sårinfektion. {name} ordineras infusion Dalacin {dose} mg x 3. I medicinskåpet finner du injektionsvätska Dalacin {concentration} mg/ml. Dalacin ska spädas till en önskad styrka på {targetConc} mg/ml.
+
+Hur många ml spädningsvätska tillsätter du för att uppnå önskad styrka?
+spadning-8: {name} har kronisk bronkobstruktion och ordineras inhalation med Ventoline. Ventoline är ett bronkdilaterande medel vid astma och KOL som ges via nebulisator.
+
+Tillgängligt preparat: Ventoline, lösning för nebulisator {concentration} mg/ml.
+
+Vilken blir den nya styrkan om {volumeVentoline} ml Ventoline späds med {volumeNaCl} ml NaCl 9 mg/ml?
+spadning-9: Morfin är ett narkotiskt analgetikum. Du skall späda {volume} ml Morfin till en ny styrka på {targetConc} mg/ml.
+
+Tillgängligt preparat: Injektionsvätska Morfin {concentration} mg/ml, injektionsvätska, lösning.
+
+Hur många ml spädningsvätska tillsätter du för att få den önskade styrkan?
+spadning-10: Morfin är ett narkotiskt analgetikum. Du skall späda {volume} ml Morfin till en ny styrka på {targetConc} mg/ml.
+
+Tillgängligt preparat: Injektionsvätska Morfin {concentration} mg/ml, injektionsvätska, lösning.
+
+Hur många ml skall {name} erhålla av den spädda lösningen om ordinationen är {dose} mg Morfin?
+spadning-11: {name} är nyopererad efter en radiusfraktur. {name} har kraftiga smärtor postoperativt.
+
+Ordination: Injektion OxyNorm {targetConc} mg/ml, {orderedVol} ml intravenöst vid behov.
+Tillgängligt preparat: Ampull OxyNorm {concentration} mg/ml, en ampull innehåller {ampVolume} ml.
+
+Du späder hela ampullen, hur många ml spädningsvätska behövs för att späda läkemedlet till den ordinerade styrkan?
+spadning-12: {name} är nyopererad efter en femurfraktur. {name} har kraftiga smärtor postoperativt.
+
+Ordination: Injektion OxyNorm {targetConc} mg/ml, {orderedMg} mg intravenöst vid behov.
+Tillgängligt preparat: Ampull OxyNorm {concentration} mg/ml, en ampull innehåller {ampVolume} ml.
+
+Du späder OxyNorm till en ny styrka på {targetConc} mg/ml. Hur många milliliter av den spädda lösningen ger du till {name}?
+spadning-13a: Naloxon injektionsvätska, lösning med styrkan {concentration} mg/ml. Naloxon är en antidot som ges vid andningsdepression orsakad av till exempel analgetika av morfintyp.
+
+{volume} ml med styrkan {concentration} mg/ml späds till styrkan {targetConc} mg/ml.
+
+a) Hur många ml spädningsvätska behövs för att nå den önskade styrkan?
+spadning-13b: Naloxon injektionsvätska, lösning med styrkan {concentration} mg/ml. Naloxon är en antidot som ges vid andningsdepression orsakad av till exempel analgetika av morfintyp.
+
+{volume} ml med styrkan {concentration} mg/ml späds till styrkan {targetConc} mg/ml.
+
+b) {dose} mg av den spädda lösningen ordineras postoperativt till {name} och ges som intravenös injektion. Hur många ml motsvarar det?
+tillsats-1: {name} är ordinerad infusion Glucos {glucosConc} mg/ml {glucosVol} ml med tillsats av Kaliumklorid {KClDose} mmol. Tillgängligt finns Kaliumklorid {KClConc} mmol/ml.
+
+Vilken blir den totala volymen av infusionen efter tillsats?
+tillsats-2: {name} är ordinerad infusion Glucos {glucosConc} mg/ml {glucosVol} ml med tillsats av Kaliumklorid {KClDose} mmol. Tillgängligt finns Kaliumklorid {KClConc} mmol/ml. När {volumeIn} ml av infusionen gått in avslutas den då droppet gått subcutant.
+
+Hur många mmol Kaliumklorid har {name} fått då? Ange svaret med hela mmol.
+tillsats-3: 1000 ml av infusionsvätska Glukos {glucosConc} mg/ml ordineras till {name} med parenteral nutrition. Du gör följande tillsatser till infusionslösningen: {NaClDose} mmol Natriumklorid ({NaClConc} mmol/ml) och {KClDose} mmol Kaliumklorid ({KClConc} mmol/ml). Infusionen skall ges på {hours} timmar.
+
+Hur många ml Natriumklorid tillsätts?
+tillsats-4: 1000 ml av infusionsvätska Glukos {glucosConc} mg/ml ordineras till {name} med parenteral nutrition. Du gör följande tillsatser till infusionslösningen: {NaClDose} mmol Natriumklorid ({NaClConc} mmol/ml) och {KClDose} mmol Kaliumklorid ({KClConc} mmol/ml). Infusionen skall ges på {hours} timmar.
+
+Hur många ml Kaliumklorid tillsätts?
+stamlosning-1: Vancomycin är ett antibiotikum som endast bör ordineras i samråd med infektionsspecialist. En ampull med Vancomycin {stockDose} mg (torrsubstans) ska beredas till stamlösning i {stockVol} ml sterilt vatten.
+
+{addedDose} mg av stamlösningen tillsätts sedan till Glukos {glucosConc} mg/ml. Den totala volymen ska bli {totalVol} ml. Den färdigspädda lösningen ges sedan som intravenös infusion.
+
+Vilken styrka i mg/ml har stamlösningen? (Observera att en stamlösning ALLTID måste spädas vidare!)
+stamlosning-2: Vancomycin är ett antibiotikum som endast bör ordineras i samråd med infektionsspecialist. En ampull med Vancomycin {stockDose} mg (torrsubstans) ska beredas till stamlösning i {stockVol} ml sterilt vatten.
+
+{addedDose} mg av stamlösningen tillsätts sedan till Glukos {glucosConc} mg/ml. Den totala volymen ska bli {totalVol} ml. Den färdigspädda lösningen ges sedan som intravenös infusion.
+
+Hur många ml av stamlösningen tillsätter du glukosinfusionen?
+stamlosning-3: Vancomycin är ett antibiotikum som endast bör ordineras i samråd med infektionsspecialist. En ampull med Vancomycin {stockDose} mg (torrsubstans) ska beredas till stamlösning i {stockVol} ml sterilt vatten.
+
+{addedDose} mg av stamlösningen tillsätts sedan till Glukos {glucosConc} mg/ml. Den totala volymen ska bli {totalVol} ml. Den färdigspädda lösningen ges sedan som intravenös infusion.
+
+Vilken styrka i mg/ml får den färdigspädda lösningen?
+stamlosning-4: Vancomycin är ett antibiotikum som endast bör ordineras i samråd med infektionsspecialist. En ampull med Vancomycin {stockDose} mg (torrsubstans) ska beredas till stamlösning i {stockVol} ml sterilt vatten.
+
+{addedDose} mg av stamlösningen tillsätts sedan till Glukos {glucosConc} mg/ml. Den totala volymen ska bli {totalVol} ml. Den färdigspädda lösningen ges sedan som intravenös infusion.
+
+Hur många ml glukoslösning behövs för att iordningställa ordinationen?
+infusion-1: Hur lång tid tar det att infundera {volume} ml infusionsvätska med en infusionshastighet av {dropsPerMin} droppar/min? På aggregatet ser du att 1 ml = {dropsPerMl} droppar.
+
+Svara i hela timmar och hela minuter.
+infusion-2: 1000 ml av infusionsvätska Glukos {glucosConc} mg/ml ordineras till {name} med parenteral nutrition. Du gör följande tillsatser till infusionslösningen: {NaClDose} mmol Natriumklorid ({NaClConc} mmol/ml) och {KClDose} mmol Kaliumklorid ({KClConc} mmol/ml). Infusionen skall ges på {hours} timmar.
+
+Vilken blir infusionshastigheten i droppar/minut? (1 ml = {dropsPerMl} droppar). Ange svaret i hela droppar/minut.
+infusion-3: 1000 ml av infusionsvätska Glukos {glucosConc} mg/ml ordineras till {name} med parenteral nutrition. Du gör följande tillsatser till infusionslösningen: {NaClDose} mmol Natriumklorid ({NaClConc} mmol/ml) och {KClDose} mmol Kaliumklorid ({KClConc} mmol/ml). Infusionen skall ges på {hours} timmar.
+
+Vilken blir infusionshastigheten i ml/h? Ange svaret i hela ml/h.
+infusion-4: Din patient {name} ordineras infusion Ringeracetat {volume} ml med en dropptakt på {dropsPerMin} droppar/minut. (1 ml = {dropsPerMl} droppar).
+
+Vid vilket klockslag beräknas infusionen vara färdig om infusionen påbörjas kl. {startHour}:00?
+infusion-5: {name} ordineras {volume} ml Ringeracetat. Infusionen påbörjas kl. {startHour}:00 och ska vara avslutad kl. {endHour}:00.
+
+Vilken hastighet i ml/h innebär det? Ange svaret i hela ml/h.
+infusion-6: {name} ordineras {volume} ml Ringeracetat. Infusionen påbörjas kl. {startHour}:00 och ska vara avslutad kl. {endHour}:00. (1 ml = {dropsPerMl} droppar).
+
+Vilken infusionshastighet i droppar/min innebär det? Ange svaret i hela droppar/min.
+gas-1: {name} har en pneumoni och behöver syrgas på grimma, {flowRate} liter syrgas per minut. Ni ska nu lämna avdelningen och behöver ha med en transportabel syrgasflaska. Tillgängligt finns en syrgasflaska på {bottleSize} liter med trycket {pressure} bar.
+
+Hur länge räcker syrgasen? Utgå från att patientens syrgasbehov förblir oförändrat. Svara i hela timmar och minuter.
+gas-2: Din patient {name} är i behov av syrgas och är därför ordinerad {flowRate} liter/minut. {name} ska nu på en röntgenundersökning och behöver då syrgastillförsel under transporten. Du hämtar en transportabel syrgasflaska som har en volym på {bottleSize} liter och ett tryck på {pressure} bar.
+
+Hur länge räcker syrgasen? Utgå från att patientens syrgasbehov förblir oförändrat. Ange svaret i hela timmar och hela minuter.

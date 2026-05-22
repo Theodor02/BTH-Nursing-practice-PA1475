@@ -1,0 +1,55 @@
+.button-component{
+    background-color: var(--btn-bg, var(--button));
+    font-size: clamp(12px, 1rem, 20px);
+    font-weight: 700;
+    border: none;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    color: var(--text-primary);
+    box-shadow: 0px 0px 20px var(--button-shadow) !important;
+    transition: background-color ease-out 0.2s, scale ease 0.2s, box-shadow ease 0.2s;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: clamp(4px, 1vw, 16px);
+    padding: clamp(4px, 1vw, 12px);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+}
+
+.button-component:hover{
+    cursor: pointer;
+    scale: 1.05;
+    background-color: var(--btn-hover, var(--button-hover));
+    box-shadow: 0px 0px 30px var(--btn-hover, var(--button-shadow-hover)) !important;
+}
+
+.button-component:focus{
+    scale: 1.05;
+    background-color: var(--btn-hover, var(--button-hover));
+    box-shadow: 0px 0px 30px var(--btn-hover, var(--button-shadow-hover)) !important;
+}
+    
+.button-component:active{
+    scale: 0.95;
+    background-color: var(--button);
+}
+
+.button-component:disabled {
+    background-color: #ccc;
+    color: #666;             
+    cursor: not-allowed;     
+}
+
+.button-component img {
+    height: 2em;   /* scales with text */
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;  /* prevent shrinking */
+}

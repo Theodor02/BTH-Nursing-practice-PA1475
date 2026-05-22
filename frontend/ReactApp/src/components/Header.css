@@ -1,0 +1,377 @@
+.Header-div{
+    width: 100%;
+    height: 8vh;
+    min-height: 42px;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--header-background);
+    border-bottom: 2px solid var(--header-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0px 2px 4px var(--box-shadow);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 998; /* keep it above content */
+    --header-control-size: clamp(30px, 1vh, 42px);
+}
+
+.header-left{
+    height: 100%;
+    position: absolute;
+    left: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-left: 1dvw;
+}
+
+.header-left .tabs{
+    display: flex;
+    justify-content: space-evenly;
+    width: clamp(160px, 9vw, 500px);
+    gap: 1dvw;
+}
+
+.home-button{
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin-right: 1dvw;
+}
+
+.home-button img{
+    height: clamp(36px, 5vw, 42px);
+}
+
+.header-right{
+    height: 100%;
+    position: absolute;
+    right: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: clamp(10px, 2vw, 30px);
+    gap: clamp(12px, 3vw, 100px);
+}
+
+.darkmode-button{
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90%;
+}
+
+.darkmode-button img{
+    height: clamp(30px, 5vw, 42px);
+    object-fit: contain;
+}
+
+.button-wrapper{
+    height: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.account-button{
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%
+}
+
+.account-button img{
+    height: clamp(30px, 1vh, 42px);
+    object-fit: contain;
+}
+
+.account-menu-shell{
+    position: relative;
+}
+
+.account-menu-button{
+    background: rgba(255, 255, 255, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(7px, 0.8vw, 10px);
+    height: var(--header-control-size);
+    min-width: clamp(116px, 12vw, 138px);
+    padding: 0 clamp(12px, 1vw, 16px);
+    font-family: var(--font-family);
+    font-size: var(--header-control-font-size);
+    font-weight: 700;
+    line-height: 1;
+    transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+.account-menu-button:hover:not(:disabled){
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.account-menu-button:disabled{
+    cursor: wait;
+    opacity: 0.72;
+}
+
+.account-menu-button img{
+    width: 20px;
+
+}
+
+.account-menu-button span{
+    white-space: nowrap;
+}
+
+.account-menu-button svg:last-child{
+    width: clamp(15px, 1.8vh, 18px);
+    height: clamp(15px, 1.8vh, 18px);
+}
+
+.account-menu-panel{
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: min(320px, calc(100vw - 32px));
+    background: var(--menu-surface);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    
+    border-radius: 8px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+    padding: 18px;
+    color: var(--text-primary);
+    opacity: 1;
+    z-index: 1500;
+}
+
+.account-menu-summary{
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.account-menu-avatar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--text-primary);
+}
+.account-menu-avatar img{
+    height: 42px
+}
+
+.account-menu-meta{
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.account-menu-label{
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.account-menu-email{
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+}
+
+.account-menu-actions{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.account-menu-action{
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 14px;
+    font-family: var(--font-family);
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.account-menu-action:hover:not(:disabled){
+    transform: translateY(-1px);
+}
+
+.account-menu-action:disabled{
+    cursor: wait;
+    opacity: 0.72;
+}
+
+.account-menu-action svg{
+    flex: 0 0 auto;
+}
+
+.account-menu-delete{
+    background: rgba(180, 32, 42, 0.12);
+    color: var(--text-primary);
+    border: 1px solid rgba(180, 32, 42, 0.45);
+}
+
+.account-menu-delete:hover:not(:disabled){
+    background: rgba(180, 32, 42, 0.22);
+    border-color: rgba(180, 32, 42, 0.75);
+}
+
+.account-menu-delete svg{
+    color: #a91d2a;
+}
+
+.account-menu-logout{
+    background: var(--button);
+    color: var(--text-primary);
+    box-shadow: 0 3px 0 var(--button-shadow);
+}
+
+.account-menu-logout:hover:not(:disabled){
+    background: var(--button-hover);
+    box-shadow: 0 4px 0 var(--button-shadow-hover);
+}
+
+.account-menu-logout:active:not(:disabled){
+    transform: translateY(1px);
+    box-shadow: 0 1px 0 var(--button-shadow);
+}
+
+.delete-account-overlay{
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(7, 14, 24, 0.55);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    
+}
+
+.delete-account-header {
+    display: flex;
+    align-items: center;      /* vertical centering */
+    position: relative;       /* anchor for button */
+    margin-bottom: 10px;
+    height: 50px;
+}
+
+.delete-account-header h2 {
+    margin-bottom: 0 !important;
+}
+
+.delete-account-header button {
+    position: absolute;
+    right: 0;
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    font-size: 1.5rem;
+}
+
+.delete-account-header button:hover{
+    background: rgba(87, 0, 0, 0.4);
+    cursor: pointer;
+}
+
+.delete-account-modal{
+    width: min(440px, 100%);
+    background: var(--menu-surface);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 8px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
+    color: var(--text-primary);
+    padding: 24px;
+    font-family: var(--font-family);
+}
+
+.delete-account-modal h2{
+    margin: 0 0 12px;
+    font-size: 1.45rem;
+}
+
+.delete-account-modal p{
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.delete-account-error{
+    margin-top: 14px !important;
+    color: #9f1239 !important;
+    font-weight: 700;
+}
+
+.delete-account-actions{
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.delete-account-actions button:disabled{
+    cursor: wait;
+    opacity: 0.72;
+}
+
+.delete-account-cancel{
+    background: rgba(255, 255, 255, 0.55);
+    color: var(--text-primary);
+}
+
+.delete-account-confirm{
+    background: #b91c1c;
+    color: white;
+}
+
+.actions{
+    display: flex;
+    flex-direction: row;
+    gap:10px;
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .header-left .tabs {
+        width: clamp(130px, 35vw, 180px);
+    }
+    
+    .header-left {
+        padding-left: clamp(8px, 1.5vw, 20px);
+    }
+}

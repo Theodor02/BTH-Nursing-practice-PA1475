@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Dos, styrka, mängd",
+    "history": {}
+  },
+  {
+    "id": 2,
+    "name": "Spädning",
+    "history": {}
+  },
+  {
+    "id": 3,
+    "name": "Tillsats",
+    "history": {}
+  },
+  {
+	"id": 4,
+	"name": "Stamlösning",
+	"history": {}
+  },
+  {
+	"id": 5,
+	"name": "Infusionshastighet",
+	"history": {}
+  },
+  {
+	"id": 6,
+	"name": "Räkna med gas",
+	"history": {}
+  }
+]

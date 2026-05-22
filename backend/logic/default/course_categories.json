@@ -1,0 +1,66 @@
+[
+  {
+    "course_id": 1,
+    "category_id": 1
+  },
+  {
+    "course_id": 2,
+    "category_id": 1
+  },
+  {
+    "course_id": 3,
+    "category_id": 1
+  },
+  {
+    "course_id": 4,
+    "category_id": 1
+  },
+  {
+    "course_id": 2,
+    "category_id": 2
+  },
+  {
+    "course_id": 3,
+    "category_id": 2
+  },
+  {
+    "course_id": 4,
+    "category_id": 2
+  },
+  {
+    "course_id": 2,
+    "category_id": 3
+  },
+  {
+    "course_id": 3,
+    "category_id": 3
+  },
+  {
+    "course_id": 2,
+    "category_id": 4
+  },
+  {
+    "course_id": 3,
+    "category_id": 4
+  },
+  {
+    "course_id": 4,
+    "category_id": 3
+  },
+  {
+    "course_id": 4,
+    "category_id": 4
+  },
+  {
+    "course_id": 3,
+    "category_id": 5
+  },
+  {
+    "course_id": 4,
+    "category_id": 5
+  },
+  {
+    "course_id": 4,
+    "category_id": 6
+  }
+]

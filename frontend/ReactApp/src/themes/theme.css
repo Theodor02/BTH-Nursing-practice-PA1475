@@ -1,0 +1,106 @@
+:root {
+    /*General*/
+    --background1: #D6DBF9;
+    --background2: #00a0cc;
+    --card-bg: #bfe9df;
+    --panel: #006A6A;
+    --secondary-panel: #7FF5F5;
+    --accent: rgba(0, 220, 180, 1);
+    /* --accent-soft: rgb(0, 255, 225); */
+    --accent-soft: rgb(255,255,255, 0.7);
+    --tab-select: rgb(255, 255, 255);
+    --panel-gradient: radial-gradient(circle at bottom left, var(--panel), var(--secondary-panel));
+    --text-primary: #1A2140;
+    --text-secondary: #4C567A;
+    --text-selected: #C2C8EE;
+    --alpha: 0.5;
+    --border: #3f7162;
+    --menu-surface: #bfe9df;
+    --account-menu-border: rgba(63, 113, 98, 0.42);
+
+    /*Header*/
+    /* --header-background: #BFEBEA; */
+    --header-background: rgb(110, 190, 189);
+
+    /* --header-border: whitesmoke; */
+    /*Button*/
+    --button: #75d8be;
+    --button-hover: #06ae87;
+    --button-shadow: #006b86;
+    --button-shadow-hover: #00ffee;
+    --box-shadow: #094345;
+    --secondary-button: #a37de5;
+    --secondary-button-hover: #7b39ec;
+    /*Table*/
+    --table-header-bg: #00c8c8;
+    --table-row-hover: rgba(136, 142, 255, 0.06);
+    --table-border:  rgba(136, 142, 255, 0.3);
+    /*Select*/
+    --selected-option: rgba(0, 223, 227, 1);
+    /* glow */
+    --glow-correct: rgba(0, 255, 120, 0.7);
+    --glow-wrong: rgba(255, 60, 60, 0.7);
+    /*Font*/
+    --font-family: 'Arial', 'Verdana', 'Helvetica';
+    /* Calculator */
+    --calc-bg: rgb(80, 155, 154);
+    --calc-display-bg: #2b7470;
+    --calc-btn-bg: #6dc5c2;
+    --calc-btn-hover: #54b0ac;
+    --calc-btn-text: #f0fafa;
+    --calc-text-muted: #a8d8d6;
+    --calc-border: rgba(0, 0, 0, 0.15);
+    --calc-op-bg: #1e5c58;
+    --calc-op-color: #c8f0ee;
+}
+
+.dark {
+    /*General*/
+    --background1: #1E3A8A;
+    --background2: #0F172A;
+    --card-bg: #44438870;
+    --panel: #0a1b36;
+    --secondary-panel: #193d7b;
+    --panel-gradient: radial-gradient(circle at bottom left, var(--panel), var(--secondary-panel));
+    --text-primary: #F1F3FF;
+    --text-secondary: #C2C8EE;
+    --text-selected: #d57aff;
+    --accent: #334bb7;
+    --accent-soft: rgb(83, 178, 255);
+    --tab-select: rgb(83, 178, 255);
+    --alpha: 0.25;
+    --border: #2a3150;
+    --menu-surface: #444388;
+    --account-menu-border: rgba(124, 163, 255, 0.28);
+
+    /*Header*/
+    --header-background: #4e6ed198;
+    /*Button*/
+    --button: #375cc9;
+    --button-hover: #1240ca;
+    --button-shadow: #0f0072;
+    --button-shadow-hover: #0024a4;
+    --box-shadow: #0f1126;
+    --secondary-button: #7C3AED;
+    --secondary-button-hover: #7634e7;
+    /*Table*/
+    --table-header-bg: rgb(0, 46, 198);
+    --table-row-hover: rgba(136, 142, 255, 0.1);
+    --table-border:  rgba(136, 142, 255, 0.3);
+    --table-row-bg: rgba(0, 0, 0, 0.034);
+    /*Select*/
+    --selected-option: rgb(54, 0, 201);
+    /* glow */
+    --glow-correct: rgba(39, 174, 96, 0.85);
+    --glow-wrong: rgba(192, 57, 43, 0.85);
+    /* Calculator */
+    --calc-bg: #243050;
+    --calc-display-bg: #131828;
+    --calc-btn-bg: #161b2e;
+    --calc-btn-hover: #1e2540;
+    --calc-btn-text: #e2e8f0;
+    --calc-text-muted: #64748b;
+    --calc-border: rgba(255, 255, 255, 0.06);
+    --calc-op-bg: rgba(67, 97, 238, 0.18);
+    --calc-op-color: #7ba4ff;
+}

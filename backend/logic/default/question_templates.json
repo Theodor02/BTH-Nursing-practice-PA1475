@@ -1,0 +1,1104 @@
+[
+    {
+        "category_id": 1,
+        "template": "{name} har en övre urinvägsinfektion och är ordinerad Doktacillin. Tillgängligt preparat är Doktacillin pulver till injektions-/infusionsvätska, lösning. {name} {age} år, ordineras Doktacillin som intravenös injektion. {name} väger {weight} kg. Ordinerad mängd är {dosePerKg} mg/kg kroppsvikt och dygn fördelat på {doses} doser. Varje dos blandas med {dilutionVol} ml vatten för injektionsvätskor.\n\nHur många mg skall ges vid varje dostillfälle?",
+        "variables": {
+            "name": "$STANDARD_NAMES",
+            "age": {"min" : 3, "max" : 80, "decimals": 0},
+            "weight": { "depends_on": "age", "formula": "75 / (1 + 2.71828 ** (-0.2 * (age - 12)))", "decimals": 0 },
+            "dosePerKg": [50],
+            "doses": [4],
+            "dilutionVol": [10]
+        },
+        "formula": "weight * dosePerKg / doses",
+        "unit": "mg",
+        "tolerance": 0.5,
+        "hints": [
+            "Här behöver du inte använda dos/styrka/mängd-triangeln",
+            "Tänk på att fördela dygnsdosen på rätt antal dostillfällen"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19640331000010",
+        "active": true
+    },
+    {
+        "category_id": 1,
+        "template": "{name} har en övre urinvägsinfektion och är ordinerad Doktacillin. Tillgängligt preparat är Doktacillin pulver till injektions-/infusionsvätska, lösning. {name} {age} år, ordineras Doktacillin som intravenös injektion. {name} väger {weight} kg. Ordinerad mängd är {dosePerKg} mg/kg kroppsvikt och dygn fördelat på {doses} doser. Varje dos blandas med {dilutionVol} ml vatten för injektionsvätskor.\n\nHur många milligram blir dygnsdosen?",
+        "variables": {
+            "name": "$STANDARD_NAMES",
+            "age": {"min": 3, "max": 80, "decimals": 0},
+            "weight": { "depends_on": "age", "formula": "75 / (1 + 2.71828 ** (-0.2 * (age - 12)))", "decimals": 0 },
+            "dosePerKg": [50],
+            "doses": [4],
+            "dilutionVol": [10]
+        },
+        "formula": "weight * dosePerKg",
+        "unit": "mg",
+        "tolerance": 0,
+        "hints": [
+            "Här behöver du inte använda dos/styrka/mängd-triangeln",
+            "Här är det den totala dosen på dygnet vi vill veta"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19640331000010",
+        "active": true
+    },
+    {
+        "category_id": 1,
+        "template": "En patient har en postoperativ sårinfektion. {name} ordineras infusion Dalacin {dose} mg x 3. I medicinskåpet finner du injektionsvätska Dalacin {concentration} mg/ml med {ampVolume} ml i varje ampull.\n\nHur många ampuller behöver du använda vid ett dostillfälle?",
+        "variables": {
+            "name": ["Han", "Hon", "Hen"],
+            "dose": [300, 600],
+            "concentration": [150],
+            "ampVolume": [2, 4]
+        },
+        "formula": "dose / concentration / ampVolume",
+        "unit": "ampull",
+        "tolerance": 0,
+        "hints": [
+            "Tänk på att svaret är antalet ampuller, och ampullen innehåller flera ml"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19760608000014",
+        "active": true,
+        "round_answer": true
+    },
+    {
+        "category_id": 1,
+        "template": "Ett barn har fått en postoperativ sårinfektion. {name} ordineras infusion Dalacin {dosePerKg} mg/kg och dygn fördelat på {doses} dostillfällen. Barnet väger {weight} kg.\n\nHur många milligram motsvarar ett dostillfälle? Ange svaret i hela milligram.",
+        "variables": {
+            "name": ["Han", "Hon", "Hen"],
+            "dosePerKg": { "min": 25, "max": 40, "step": 5 },
+            "doses": [3],
+            "weight": { "min": 20, "max": 50, "decimals": 0 }
+        },
+        "formula": "dosePerKg * weight / doses",
+        "unit": "mg",
+        "tolerance": 0,
+        "hints": [],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19760608000014",
+        "active": true,
+        "round_answer": true
+    },
+    {
+        "category_id": 1,
+        "template": "En patient har en postoperativ sårinfektion. {name} ordineras infusion Dalacin {dose} mg x {frequency}. I medicinskåpet finner du injektionsvätska Dalacin {concentration} mg/ml med {ampVolume} ml i varje ampull.\n\nVilken blir den totala dygnsdosen Dalacin som patienten får?",
+        "variables": {
+            "name": ["Han", "Hon", "Hen"],
+            "dose": [300, 600],
+            "frequency": [3],
+            "concentration": [150],
+            "ampVolume": [2, 4]
+        },
+        "formula": "dose * frequency",
+        "unit": "mg",
+        "tolerance": 0.5,
+        "hints": [
+            "Det är flera dostillfällen per dygn"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19760608000014",
+        "active": true
+    },
+    {
+        "category_id": 1,
+        "template": "Ett barn har fått en postoperativ sårinfektion. {name} ordineras infusion Dalacin {dosePerKg} mg/kg och dygn fördelat på {doses} dostillfällen. Barnet väger {weight} kg.\n\nVilken blir den totala dygnsdosen Dalacin som patienten får? Ange svaret i gram.",
+        "variables": {
+            "name": ["Han", "Hon", "Hen"],
+            "dosePerKg": { "min": 25, "max": 40, "step": 5 },
+            "doses": [3],
+            "weight": { "min": 20, "max": 50, "decimals": 0 }
+        },
+        "formula": "dosePerKg * weight / 1000",
+        "unit": "g",
+        "tolerance": 0.01,
+        "hints": [
+			"Svaret ska anges i gram, inte milligram"
+		],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19760608000014",
+        "active": true
+    },
+    {
+        "category_id": 1,
+        "template": "{name} är ordinerad subcutan inj. Klexane {dose} E som trombosprofylax. Just idag finns bara tillgängligt inj. Klexane i ampuller med {totalUnits} E/{totalVolume} ml.\n\nHur många ml ger du {name}?",
+        "variables": {
+            "name": "$STANDARD_NAMES",
+            "dose": [2000, 4000],
+            "totalUnits": [30000, 100000],
+            "totalVolume": { "depends_on": "totalUnits", "formula": "totalUnits / 10000", "decimals": 0 }
+        },
+        "formula": "dose / (totalUnits / totalVolume)",
+        "unit": "ml",
+        "tolerance": 0.01,
+        "hints": [
+            "Räkna ut styrka per milliliter först",
+            "Subcutana injektioner är ofta små mängder"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20170530000178",
+        "active": true
+    },
+    {
+        "category_id": 1,
+        "template": "Patienten är ordinerad infusion Paracetamol. Tillgängligt finns Paracetamol infusionsvätska, lösning {concentration} mg/ml. Patientens vikt är {weight} kg och ska därför få {dosePerKg} mg/kg.\n\nHur många mg får patienten?",
+        "variables": {
+            "concentration": [10],
+            "weight": { "min": 10, "max": 50, "decimals": 0 },
+            "dosePerKg": [15]
+        },
+        "formula": "weight * dosePerKg",
+        "unit": "mg",
+        "tolerance": 0.5,
+        "hints": [
+            "Här eftersöks en dos, men du behöver inte använda triangeln"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20110119000014",
+        "active": true
+    },
+    {
+        "category_id": 1,
+        "template": "Patienten är ordinerad infusion Paracetamol. Tillgängligt finns Paracetamol infusionsvätska, lösning {concentration} mg/ml. Patientens vikt är {weight} kg och ska därför få {dosePerKg} mg/kg.\n\nHur många ml får patienten?",
+        "variables": {
+            "concentration": [10],
+            "weight": { "min": 10, "max": 50, "decimals": 0 },
+            "dosePerKg": [15]
+        },
+        "formula": "weight * dosePerKg / concentration",
+        "unit": "ml",
+        "tolerance": 0.5,
+        "hints": [
+            "Räkna först ut dosen patienten ska ha",
+            "Här eftersöks en mängd"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20110119000014",
+        "active": true
+    },
+    {
+        "category_id": 1,
+        "template": "Läkaren har ordinerat intramuskulär injektion Morfin {dose} mg x {frequency}. Tillgängligt finns Morfin injektionsvätska {concentration} mg/ml.\n\nHur många ml motsvarar ett dostillfälle?",
+        "variables": {
+            "dose": { "min": 10, "max": 15, "step": 1 },
+            "frequency": [1, 2, 3],
+            "concentration": [10]
+        },
+        "formula": "dose / concentration",
+        "unit": "ml",
+        "tolerance": 0.01,
+        "hints": [
+            "Här eftersöks en mängd"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20131019000027",
+        "active": true
+    },
+    {
+        "category_id": 1,
+        "template": "Läkaren har ordinerat intramuskulär injektion Morfin {dose} mg x {frequency}. Tillgängligt finns Morfin injektionsvätska {concentration} mg/ml.\n\nHur många mg blir dygnsdosen?",
+        "variables": {
+            "dose": { "min": 10, "max": 15, "step": 1 },
+            "frequency": [1, 2, 3],
+            "concentration": [10]
+        },
+        "formula": "dose * frequency",
+        "unit": "mg",
+        "tolerance": 0.5,
+        "hints": [
+            "Här behöver du inte använda triangeln"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20131019000027",
+        "active": true
+    },
+    {
+        "category_id": 1,
+        "template": "{name} har kronisk bronkobstruktion och ordineras inhalation med Ventoline. Ventoline är ett bronkdilaterande medel vid astma och KOL som ges via nebulisator.\n\nTillgängligt preparat: Ventoline, lösning för nebulisator {concentration} mg/ml.\n\nHur många mg erhåller {name} om {volume} ml Ventoline ordineras?",
+        "variables": {
+            "name": "$STANDARD_NAMES",
+            "concentration": [2, 5],
+            "volume": [0.5, 1.0, 1.5, 2.0]
+        },
+        "formula": "concentration * volume",
+        "unit": "mg",
+        "tolerance": 0.01,
+        "hints": [
+            "Här eftersöks en dos"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19731005000020",
+        "active": true
+    },
+    {
+        "category_id": 1,
+        "template": "En patient med illamående ordineras Droperidol. Tillgängligt preparat är Droperidol, injektionsvätska, lösning {concentration} mg/ml. Ampullen innehåller {ampVolume} ml. Patienten ordineras {dose} mg.\n\nHur många ml injektionsvätska motsvarar det?",
+        "variables": {
+            "concentration": [2.5],
+            "ampVolume": [2],
+            "dose": [0.625, 0.75, 1.0, 1.25]
+        },
+        "formula": "dose / concentration",
+        "unit": "ml",
+        "tolerance": 0.01,
+        "hints": [
+            "Här eftersöks en mängd"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20120405000017",
+        "active": true
+    },
+    {
+        "category_id": 1,
+        "template": "{name} ska opereras och som antibiotikaprofylax ges Infusion Cloxacillin 2 g. Detta är en torrsubstans som enligt FASS ska blandas med 100 ml NaCl. Vilken styrka i mg/ml får den spädda lösningen?",
+        "variables": {
+            "name": ["Anna", "Ali", "Maria", "Omar", "Karin", "Fatima", "Johan", "Aisha", "Erik", "Hassan"]
+        },
+        "formula": "2000 / 100",
+        "unit": "mg/ml",
+        "tolerance": 0.01,
+        "hints": [
+            "Här eftersöks en styrka"
+        ],
+        "link": "",
+        "active": true
+    },
+    {
+        "category_id": 2,
+        "template": "En patient med illamående ordineras Droperidol. Tillgängligt preparat är Droperidol, injektionsvätska, lösning {concentration} mg/ml. Ampullen innehåller {ampVolume} ml.\n\nEn ampull Droperidol skall spädas med NaCl 9 mg/ml till en ny styrka på {targetConc} mg/ml.\n\nHur många ml spädningsvätska behövs?",
+        "variables": {
+            "concentration": [2.5],
+            "ampVolume": [2],
+            "targetConc": [1]
+        },
+        "formula": "(concentration * ampVolume / targetConc) - ampVolume",
+        "unit": "ml",
+        "tolerance": 0.01,
+        "hints": [
+            "Tänk på att ampullen innehåller 2 ml läkemedel",
+            "Kom ihåg att dra bort mängden läkemedel från den totala volymen"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20120405000017",
+        "active": true
+    },
+    {
+        "category_id": 2,
+        "template": "Vid en anafylaktisk chock ordineras en patient {dose} mg Adrenalin intravenöst. Innan ordinationen verkställs späds Adrenalin {concentration} mg/ml, {volume} ml, till en styrka på {targetConc} mg/ml.\n\nHur många ml NaCl använder du för att uppnå önskad styrka?",
+        "variables": {
+            "dose": [0.2, 0.3, 0.4],
+            "concentration": [1],
+            "volume": [0.5, 1.0, 2.0],
+            "targetConc": [0.1]
+        },
+        "formula": "(concentration * volume / targetConc) - volume",
+        "unit": "ml",
+        "tolerance": 0.01,
+        "hints": [
+            "Räkna ut dosen i koncentratet först",
+            "Kom ihåg att dra bort mängden läkemedel från den totala volymen"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19741206000026",
+        "active": true
+    },
+    {
+        "category_id": 2,
+        "template": "Vid en anafylaktisk chock ordineras en patient {dose} mg Adrenalin intravenöst. Innan ordinationen verkställs späds Adrenalin {concentration} mg/ml, {volume} ml, till en styrka på {targetConc} mg/ml.\n\nHur många ml av den spädda lösningen ges till patienten?",
+        "variables": {
+            "dose": [0.2, 0.3, 0.4],
+            "concentration": [1],
+            "volume": [0.5, 1.0, 2.0],
+            "targetConc": [0.1]
+        },
+        "formula": "dose / targetConc",
+        "unit": "ml",
+        "tolerance": 0.01,
+        "hints": [
+            "Här eftersöks en mängd",
+            "Räkna med styrkan på det spädda läkemedlet"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19741206000026",
+        "active": true
+    },
+    {
+        "category_id": 2,
+        "template": "Vid en anafylaktisk chock ordineras en patient {dose} mg Adrenalin intravenöst. Innan ordinationen verkställs späds {volumeDrug} ml Adrenalin med styrkan {concentration} mg/ml med {volumeNaCl} ml NaCl 9 mg/ml.\n\nVilken styrka får den spädda lösningen?",
+        "variables": {
+            "dose": [0.2, 0.3, 0.4],
+            "volumeDrug": [1, 2],
+            "concentration": [1],
+            "volumeNaCl": { "depends_on": "volumeDrug", "formula": "volumeDrug * 9", "decimals": 0 }
+        },
+        "formula": "concentration * volumeDrug / (volumeDrug + volumeNaCl)",
+        "unit": "mg/ml",
+        "tolerance": 0.001,
+        "hints": [
+            "Räkna ut dosen i koncentratet först",
+            "Tänk på att totalvolymen är både läkemedel och spädningsvätska"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19741206000026",
+        "active": true
+    },
+    {
+        "category_id": 2,
+        "template": "En patient ordineras smärtlindring med Ultiva {dose} mg i torrsubstans som skall blandas med NaCl 9 mg/ml till en styrka av {targetConc} µg/ml.\n\nHur många ml NaCl 9 mg/ml används?",
+        "variables": {
+            "dose": [1, 2, 5],
+            "targetConc": [20, 50]
+        },
+        "formula": "dose * 1000 / targetConc",
+        "unit": "ml",
+        "tolerance": 0.5,
+        "hints": [
+            "Omvandla mg till µg",
+            "Ultiva är ett pulver som inte tillför någon volym i den spädda lösningen"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19980206000074",
+        "active": true
+    },
+    {
+        "category_id": 2,
+        "template": "En patient har en postoperativ sårinfektion. Han ordineras infusion Dalacin {dose} mg x 3. I medicinskåpet finner du injektionsvätska Dalacin {concentration} mg/ml. Dalacin ska spädas till en önskad styrka på {targetConc} mg/ml.\n\nVilken blir den totala volymen efter spädning?",
+        "variables": {
+            "dose": [300, 600],
+            "concentration": [150],
+            "targetConc": [12]
+        },
+        "formula": "dose / targetConc",
+        "unit": "ml",
+        "tolerance": 0.5,
+        "hints": [
+            "Här eftersöks en mängd"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19760608000014",
+        "active": true
+    },
+    {
+        "category_id": 2,
+        "template": "En patient har en postoperativ sårinfektion. Han ordineras infusion Dalacin {dose} mg x 3. I medicinskåpet finner du injektionsvätska Dalacin {concentration} mg/ml. Dalacin ska spädas till en önskad styrka på {targetConc} mg/ml.\n\nHur många ml spädningsvätska tillsätter du för att uppnå önskad styrka?",
+        "variables": {
+            "dose": [300, 600],
+            "concentration": [150],
+            "targetConc": [12]
+        },
+        "formula": "dose / targetConc - dose / concentration",
+        "unit": "ml",
+        "tolerance": 0.5,
+        "hints": [
+            "Hur många ml läkemedel behövs?",
+            "Kom ihåg att ta bort mängden läkemedel för att få fram mängden spädningsvätska"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19760608000014",
+        "active": true
+    },
+    {
+        "category_id": 2,
+        "template": "{name} har kronisk bronkobstruktion och ordineras inhalation med Ventoline. Ventoline är ett bronkdilaterande medel vid astma och KOL som ges via nebulisator.\n\nTillgängligt preparat: Ventoline, lösning för nebulisator {concentration} mg/ml.\n\nVilken blir den nya styrkan om {volumeVentoline} ml Ventoline späds med {volumeNaCl} ml NaCl 9 mg/ml?",
+        "variables": {
+            "name": "$STANDARD_NAMES",
+            "concentration": [2, 5],
+            "volumeVentoline": [0.5, 1.0],
+            "volumeNaCl": { "depends_on": "volumeVentoline", "formula": "2.0 - volumeVentoline", "decimals": 1 }
+        },
+        "formula": "concentration * volumeVentoline / (volumeVentoline + volumeNaCl)",
+        "unit": "mg/ml",
+        "tolerance": 0.01,
+        "hints": [
+            "Räkna ut dosen i koncentratet",
+            "Räkna ut totala volymen"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19731005000020",
+        "active": true
+    },
+    {
+        "category_id": 2,
+        "template": "Morfin är ett narkotiskt analgetikum. Du skall späda {volume} ml Morfin till en ny styrka på {targetConc} mg/ml.\n\nTillgängligt preparat: Injektionsvätska Morfin {concentration} mg/ml, injektionsvätska, lösning.\n\nHur många ml spädningsvätska tillsätter du för att få den önskade styrkan?",
+        "variables": {
+            "volume": [1, 2],
+            "targetConc": {"depends_on": "volume", "formula": "volume / 2", "decimals": 1},
+            "concentration": [10]
+        },
+        "formula": "concentration * volume / targetConc - volume",
+        "unit": "ml",
+        "tolerance": 0.1,
+        "hints": [
+            "Vilken blir dosen i koncentratet?",
+            "Kom ihåg att ta bort mängden läkemedel för att få fram mängden spädningsvätska"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20131019000027",
+        "active": true
+    },
+    {
+        "category_id": 2,
+        "template": "Morfin är ett narkotiskt analgetikum. Du skall späda {volume} ml Morfin till en ny styrka på {targetConc} mg/ml.\n\nTillgängligt preparat: Injektionsvätska Morfin {concentration} mg/ml, injektionsvätska, lösning.\n\nHur många ml skall en patient erhålla av den spädda lösningen om ordinationen är {dose} mg Morfin?",
+        "variables": {
+            "volume": [1, 2],
+            "targetConc": {"depends_on": "volume", "formula": "volume / 2", "decimals": 1},
+            "concentration": [10],
+            "dose": { "min": 2.0, "max": 8.0, "step": 0.5 }
+        },
+        "formula": "dose / targetConc",
+        "unit": "ml",
+        "tolerance": 0.01,
+        "hints": [
+            "Här eftersöks en mängd"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20131019000027",
+        "active": true
+    },
+    {
+        "category_id": 2,
+        "template": "{name} är nyopererad efter en radiusfraktur. {name} har kraftiga smärtor postoperativt.\n\nOrdination: Injektion OxyNorm {targetConc} mg/ml, {orderedVol} ml intravenöst vid behov.\nTillgängligt preparat: Ampull OxyNorm {concentration} mg/ml, en ampull innehåller {ampVolume} ml.\n\nDu späder hela ampullen, hur många ml spädningsvätska behövs för att späda läkemedlet till den ordinerade styrkan?",
+        "variables": {
+            "name": "$STANDARD_NAMES",
+            "targetConc": [1],
+            "orderedVol": [3],
+            "concentration": [10],
+            "ampVolume": [1, 2]
+        },
+        "formula": "concentration * ampVolume / targetConc - ampVolume",
+        "unit": "ml",
+        "tolerance": 0,
+        "hints": [
+            "Vilken är dosen i koncentratet?",
+            "Kom ihåg att ta bort mängden läkemedel för att få fram mängden spädningsvätska"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20031114000086",
+        "active": true
+    },
+    {
+        "category_id": 2,
+        "template": "{name} är nyopererad efter en femurfraktur. {name} har kraftiga smärtor postoperativt.\n\nOrdination: Injektion OxyNorm {targetConc} mg/ml, {orderedMg} mg intravenöst vid behov.\nTillgängligt preparat: Ampull OxyNorm {concentration} mg/ml, en ampull innehåller {ampVolume} ml.\n\nDu späder OxyNorm till en ny styrka på {targetConc} mg/ml. Hur många milliliter av den spädda lösningen ger du till {name}?",
+        "variables": {
+            "name": "$STANDARD_NAMES",
+            "orderedMg": { "min": 2.0, "max": 8.0, "step": 0.5 },
+            "targetConc": [1],
+            "concentration": [10],
+            "ampVolume": [1]
+        },
+        "formula": "orderedMg / targetConc",
+        "unit": "ml",
+        "tolerance": 0.01,
+        "hints": [
+            "Räkna med styrkan på den spädda lösningen",
+            "Här eftersöks en mängd"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20031114000086",
+        "active": true
+    },
+    {
+        "category_id": 2,
+        "template": "Naloxon injektionsvätska, lösning med styrkan {concentration} mg/ml. Naloxon är en antidot som ges vid andningsdepression orsakad av till exempel analgetika av morfintyp.\n\n{volume} ml med styrkan {concentration} mg/ml späds till styrkan {targetConc} mg/ml.\n\na) Hur många ml spädningsvätska behövs för att nå den önskade styrkan?",
+        "variables": {
+            "concentration": [0.4],
+            "volume": [1],
+            "targetConc": [0.04]
+        },
+        "formula": "concentration * volume / targetConc - volume",
+        "unit": "ml",
+        "tolerance": 0.5,
+        "hints": [
+            "Räkna ut dosen i koncentratet först",
+            "Kom ihåg att dra bort mängden läkemedel från den totala volymen"
+        ],
+        "link": "",
+        "active": true
+    },
+    {
+        "category_id": 2,
+        "template": "Naloxon injektionsvätska, lösning med styrkan {concentration} mg/ml. Naloxon är en antidot som ges vid andningsdepression orsakad av till exempel analgetika av morfintyp.\n\n{volume} ml med styrkan {concentration} mg/ml späds till styrkan {targetConc} mg/ml.\n\nb) {dose} mg av den spädda lösningen ordineras postoperativt till en patient och ges som intravenös injektion. Hur många ml motsvarar det?",
+        "variables": {
+            "concentration": [0.4],
+            "volume": [1],
+            "targetConc": [0.04],
+            "dose": { "min": 0.04, "max": 0.2, "decimals": 2 }
+        },
+        "formula": "dose / targetConc",
+        "unit": "ml",
+        "tolerance": 0.01,
+        "hints": [
+            "Här eftersöks en mängd",
+            "Räkna med styrkan på den spädda lösningen"
+        ],
+        "link": "",
+        "active": true
+    },
+    {
+        "category_id": 2,
+        "template": "Du ska späda {ml} ml av ett lädemedel med styrkan {concentration} mg/ml till en ny styrka på {targetConc} mg/ml.\n\nHur många milliliter spädningsvärska använder du?",
+        "variables": {
+            "ml": { "min": 1, "max": 10, "step": 1 },
+            "concentration": { "min": 5, "max": 50, "step": 5 },
+            "targetConc": [0.5, 1, 2, 2.5, 5, 10]
+        },
+        "formula": "concentration * ml / targetConc - ml",
+        "unit": "ml",
+        "tolerance": 0.5,
+        "hints": [
+            "Räkna ut mängden spädningsvätska som behövs"
+        ],
+        "link": "",
+        "active": true
+    },
+    {
+        "category_id": 3,
+        "template": "Patienten är ordinerad infusion Glucos {glucosConc} mg/ml {glucosVol} ml med tillsats av Kaliumklorid {KClDose} mmol. Tillgängligt finns Kaliumklorid {KClConc} mmol/ml.\n\nVilken blir den totala volymen av infusionen efter tillsats?",
+        "variables": {
+            "glucosConc": [50],
+            "glucosVol": [1000],
+            "KClDose": { "min": 20, "max": 60, "step": 5 },
+            "KClConc": [1, 2]
+        },
+        "formula": "glucosVol + KClDose / KClConc",
+        "unit": "ml",
+        "tolerance": 0,
+        "hints": [
+            "Räkna ut mängden av tillsatsen"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20070824000016",
+        "active": true
+    },
+    {
+        "category_id": 3,
+        "template": "Patienten är ordinerad infusion Glucos {glucosConc} mg/ml {glucosVol} ml med tillsats av Kaliumklorid {KClDose} mmol. Tillgängligt finns Kaliumklorid {KClConc} mmol/ml. När {volumeIn} ml av infusionen gått in avslutas den då droppet gått subcutant.\n\nHur många mmol Kaliumklorid har patienten fått då? Ange svaret med hela mmol.",
+        "variables": {
+            "glucosConc": [50],
+            "glucosVol": [1000],
+            "KClDose": { "min": 20, "max": 60, "step": 5 },
+            "KClConc": [1, 2],
+            "volumeIn": { "min": 100, "max": 900, "step": 50 }
+        },
+        "formula": "KClDose / (glucosVol + KClDose / KClConc) * volumeIn",
+        "unit": "mmol",
+        "tolerance": 0.2,
+        "hints": [
+            "Räkna ut totalvolymen efter tillsats först",
+            "Hur många mmol innehåller varje ml?"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20070824000016",
+        "active": true,
+        "round_answer": true
+    },
+    {
+        "category_id": 3,
+        "template": "{glucosVol} ml av infusionsvätska Glukos {glucosConc} mg/ml ordineras till en patient med parenteral nutrition. Du gör följande tillsatser till infusionslösningen: {NaClDose} mmol Natriumklorid ({NaClConc} mmol/ml) och {KClDose} mmol Kaliumklorid ({KClConc} mmol/ml). Infusionen skall ges på {hours} timmar.\n\nHur många ml Natriumklorid tillsätts?",
+        "variables": {
+            "glucosVol": [500, 1000],
+            "glucosConc": [100],
+            "NaClDose": { "min": 10, "max": 80, "step": 5 },
+            "NaClConc": [4],
+            "KClDose": { "min": 10, "max": 30, "step": 5 },
+            "KClConc": [1, 2],
+            "hours": { "min": 6, "max": 12, "decimals": 0 }
+        },
+        "formula": "NaClDose / NaClConc",
+        "unit": "ml",
+        "tolerance": 0.5,
+        "hints": [
+            "Här eftersöks mängden natriumklorid"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19891208000200",
+        "active": true
+    },
+    {
+        "category_id": 3,
+        "template": "{glucosVol} ml av infusionsvätska Glukos {glucosConc} mg/ml ordineras till en patient med parenteral nutrition. Du gör följande tillsatser till infusionslösningen: {NaClDose} mmol Natriumklorid ({NaClConc} mmol/ml) och {KClDose} mmol Kaliumklorid ({KClConc} mmol/ml). Infusionen skall ges på {hours} timmar.\n\nHur många ml Kaliumklorid tillsätts?",
+        "variables": {
+            "glucosVol": [500, 1000],
+            "glucosConc": [100],
+            "NaClDose": { "min": 10, "max": 80, "step": 5 },
+            "NaClConc": [4],
+            "KClDose": { "min": 10, "max": 30, "step": 5 },
+            "KClConc": [1, 2],
+            "hours": { "min": 6, "max": 12, "decimals": 0 }
+        },
+        "formula": "KClDose / KClConc",
+        "unit": "ml",
+        "tolerance": 0.5,
+        "hints": [
+            "Här eftersöks mängden kaliumklorid"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19891208000200",
+        "active": true
+    },
+    {
+        "category_id": 4,
+        "template": "Vancomycin är ett antibiotikum som endast bör ordineras i samråd med infektionsspecialist. En ampull med Vancomycin {stockDose} mg (torrsubstans) ska beredas till stamlösning i {stockVol} ml sterilt vatten.\n\n{addedDose} mg av stamlösningen tillsätts sedan till Glukos {glucosConc} mg/ml. Den totala volymen ska bli {totalVol} ml. Den färdigspädda lösningen ges sedan som intravenös infusion.\n\nVilken styrka i mg/ml har stamlösningen? (Observera att en stamlösning ALLTID måste spädas vidare!)",
+        "variables": {
+            "stockDose": [1000],
+            "stockVol": [20],
+            "addedDose": { "min": 600, "max": 2000, "step": 50 },
+            "glucosConc": [50],
+            "totalVol": { "min": 250, "max": 500, "step": 50 }
+        },
+        "formula": "stockDose / stockVol",
+        "unit": "mg/ml",
+        "tolerance": 0.01,
+        "hints": [
+            "Tänk bara på stamlösningen i denna fråga"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20230201000170",
+        "active": true
+    },
+    {
+        "category_id": 4,
+        "template": "Vancomycin är ett antibiotikum som endast bör ordineras i samråd med infektionsspecialist. En ampull med Vancomycin {stockDose} mg (torrsubstans) ska beredas till stamlösning i {stockVol} ml sterilt vatten.\n\n{addedDose} mg av stamlösningen tillsätts sedan till Glukos {glucosConc} mg/ml. Den totala volymen ska bli {totalVol} ml. Den färdigspädda lösningen ges sedan som intravenös infusion.\n\nHur många ml av stamlösningen tillsätter du glukosinfusionen?",
+        "variables": {
+            "stockDose": [1000],
+            "stockVol": [20],
+            "addedDose": { "min": 600, "max": 2000, "step": 50 },
+            "glucosConc": [50],
+            "totalVol": { "min": 250, "max": 500, "step": 50 }
+        },
+        "formula": "addedDose / (stockDose / stockVol)",
+        "unit": "ml",
+        "tolerance": 0.01,
+        "hints": [
+            "Räkna ut styrkan på stamlösningen först",
+            "Här eftersöks en mängd"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20230201000170",
+        "active": true
+    },
+    {
+        "category_id": 4,
+        "template": "Vancomycin är ett antibiotikum som endast bör ordineras i samråd med infektionsspecialist. En ampull med Vancomycin {stockDose} mg (torrsubstans) ska beredas till stamlösning i {stockVol} ml sterilt vatten.\n\n{addedDose} mg av stamlösningen tillsätts sedan till Glukos {glucosConc} mg/ml. Den totala volymen ska bli {totalVol} ml. Den färdigspädda lösningen ges sedan som intravenös infusion.\n\nVilken styrka i mg/ml får den färdigspädda lösningen?",
+        "variables": {
+            "stockDose": [1000],
+            "stockVol": [20],
+            "addedDose": { "min": 600, "max": 2000, "step": 50 },
+            "glucosConc": [50],
+            "totalVol": { "min": 250, "max": 500, "step": 50 }
+        },
+        "formula": "addedDose / totalVol",
+        "unit": "mg/ml",
+        "tolerance": 0.01,
+        "hints": [
+            "Här står den totala volymen i uppgiften, alltså både läkemedel och spädningsvätska"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20230201000170",
+        "active": true
+    },
+    {
+        "category_id": 4,
+        "template": "Vancomycin är ett antibiotikum som endast bör ordineras i samråd med infektionsspecialist. En ampull med Vancomycin {stockDose} mg (torrsubstans) ska beredas till stamlösning i {stockVol} ml sterilt vatten.\n\n{addedDose} mg av stamlösningen tillsätts sedan till Glukos {glucosConc} mg/ml. Den totala volymen ska bli {totalVol} ml. Den färdigspädda lösningen ges sedan som intravenös infusion.\n\nHur många ml glukoslösning behövs för att iordningställa ordinationen?",
+        "variables": {
+            "stockDose": [1000],
+            "stockVol": [20],
+            "addedDose": { "min": 600, "max": 2000, "step": 50 },
+            "glucosConc": [50],
+            "totalVol": { "min": 250, "max": 500, "step": 50 }
+        },
+        "formula": "totalVol - addedDose / (stockDose / stockVol)",
+        "unit": "ml",
+        "tolerance": 0.5,
+        "hints": [
+            "Räkna ut styrkan på stamlösningen först",
+            "Hur många milliliter stamlösning behövs?"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20230201000170",
+        "active": true
+    },
+    {
+        "category_id": 5,
+        "template": "Hur lång tid tar det att infundera {volume} ml infusionsvätska med en infusionshastighet av {dropsPerMin} droppar/min? På aggregatet ser du att 1 ml = {dropsPerMl} droppar.\n\nSvara i hela timmar och hela minuter.",
+        "variables": {
+            "volume": { "min": 100, "max": 1000, "step": 10 },
+            "dropsPerMin": { "min": 30, "max": 100, "decimals": 0 },
+            "dropsPerMl": [20]
+        },
+        "formula": "volume * dropsPerMl / dropsPerMin * 60",
+        "tolerance": 1,
+        "hints": [
+            "Räkna ut antalet droppar för hela volymen först",
+            "Tänk på att det är 60 minuter på en timme"
+        ],
+        "link": "",
+        "active": true,
+        "answer_type": "duration",
+        "round_to_unit": "min"
+    },
+    {
+        "category_id": 5,
+        "template": "{glucosVol} ml av infusionsvätska Glukos {glucosConc} mg/ml ordineras till en patient med parenteral nutrition. Du gör följande tillsatser till infusionslösningen: {NaClDose} mmol Natriumklorid ({NaClConc} mmol/ml) och {KClDose} mmol Kaliumklorid ({KClConc} mmol/ml). Infusionen skall ges på {hours} timmar.\n\nVilken blir infusionshastigheten i droppar/minut? (1 ml = {dropsPerMl} droppar). Ange svaret i hela droppar/minut.",
+        "variables": {
+            "glucosVol": [500, 1000],
+            "glucosConc": [50, 100],
+            "NaClDose": { "min": 10, "max": 80, "step": 5 },
+            "NaClConc": [4],
+            "KClDose": { "min": 10, "max": 30, "step": 5 },
+            "KClConc": [1, 2],
+            "hours": { "min": 6, "max": 12, "step": 1 },
+            "dropsPerMl": [20]
+        },
+        "formula": "(glucosVol + NaClDose / NaClConc + KClDose / KClConc) * dropsPerMl / (hours * 60)",
+        "unit": "droppar/min",
+        "tolerance": 0.5,
+        "hints": [
+            "Räkna ut totalvolymen efter tillsats först",
+            "Hur många droppar finns det i påsen?",
+            "Hur många minuter är det?"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19900316000160",
+        "active": true,
+        "round_answer": true
+    },
+    {
+        "category_id": 5,
+        "template": "{glucosVol} ml av infusionsvätska Glukos {glucosConc} mg/ml ordineras till en patient med parenteral nutrition. Du gör följande tillsatser till infusionslösningen: {NaClDose} mmol Natriumklorid ({NaClConc} mmol/ml) och {KClDose} mmol Kaliumklorid ({KClConc} mmol/ml). Infusionen skall ges på {hours} timmar.\n\nVilken blir infusionshastigheten i ml/h? Ange svaret i hela ml/h.",
+        "variables": {
+            "glucosVol": [500, 1000],
+            "glucosConc": [50, 100],
+            "NaClDose": { "min": 10, "max": 80, "step": 5 },
+            "NaClConc": [4],
+            "KClDose": { "min": 10, "max": 30, "step": 5 },
+            "KClConc": [1, 2],
+            "hours": { "min": 6, "max": 12, "step": 1 }
+        },
+        "formula": "(glucosVol + NaClDose / NaClConc + KClDose / KClConc) / hours",
+        "unit": "ml/h",
+        "tolerance": 0.5,
+        "hints": [
+            "Räkna ut totalvolymen efter tillsats först",
+            "Hur många timmar tar infusionen?"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=19900316000160",
+        "active": true,
+        "round_answer": true
+    },
+    {
+        "category_id": 5,
+        "template": "Din patient ordineras infusion Ringeracetat {volume} ml med en dropptakt på {dropsPerMin} droppar/minut.\n\nVid vilket klockslag beräknas infusionen vara färdig om infusionen påbörjas kl. {startHour:02}:{startMinutes:02}? (1 ml = {dropsPerMl} droppar).",
+        "variables": {
+            "volume": { "min": 400, "max": 2000, "step": 100 },
+            "dropsPerMin": { "min": 30, "max": 100, "step": 5 },
+            "dropsPerMl": [20],
+            "startHour": { "min": 0, "max": 23, "step" : 1},
+            "startMinutes": [0, 30]
+        },
+        "formula": "((startHour * 60 + startMinutes) + (volume * dropsPerMl / dropsPerMin)) % 1440",
+        "tolerance": 1,
+        "hints": [
+            "Hur många droppar motsvarar mängden infusionsvätska?",
+            "Hur många timmar och minuter tar infusionen?"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20040607004883",
+        "active": true,
+        "answer_type": "time_of_day",
+        "round_to_unit": "min"
+    },
+    {
+        "category_id": 5,
+        "template": "En patient ordineras {volume} ml Ringeracetat. Infusionen påbörjas kl. {startHour:02}:00 och ska vara avslutad kl. {endHour:02}:00.\n\nVilken hastighet i ml/h innebär det? Ange svaret i hela ml/h.",
+        "variables": {
+            "volume": { "min": 500, "max": 1000, "step": 100 },
+            "startHour": { "min": 6, "max": 10, "decimals": 0 },
+            "endHour": { "min": 14, "max": 22, "decimals": 0 }
+        },
+        "formula": "volume / (endHour - startHour)",
+        "unit": "ml/h",
+        "tolerance": 0.5,
+        "hints": [
+            "Hur många timmar är det mellan klockslagen?"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20040607004883",
+        "active": true,
+        "round_answer": true
+    },
+    {
+        "category_id": 5,
+        "template": "En patient ordineras {volume} ml Ringeracetat. Infusionen påbörjas kl. {startHour:02}:00 och ska vara avslutad kl. {endHour:02}:00.\n\nVilken infusionshastighet i droppar/min innebär det? Ange svaret i hela droppar/min.",
+        "variables": {
+            "volume": { "min": 500, "max": 1000, "step": 100 },
+            "startHour": { "min": 6, "max": 10, "decimals": 0 },
+            "endHour": { "min": 14, "max": 22, "decimals": 0 },
+            "dropsPerMl": [20]
+        },
+        "formula": "volume * dropsPerMl / ((endHour - startHour) * 60)",
+        "unit": "droppar/min",
+        "tolerance": 0.5,
+        "hints": [
+            "Hur många minuter är det mellan klockslagen?",
+            "Hur många droppar motsvarar infusionen?"
+        ],
+        "link": "https://www.fass.se/LIF/product?userType=0&nplId=20040607004883",
+        "active": true,
+        "round_answer": true
+    },
+    {
+        "category_id": 5,
+        "template": "{name} ska opereras och som antibiotikaprofylax ges Infusion Cloxacillin 2 g. Detta är en torrsubstans som enligt FASS ska blandas med 100 ml NaCl. Infusionen ska gå in på {min} minuter, vilket infusionshastighet i droppar/minut innebär det? Infusionsaggregatet ger 20 droppar/ml. Ange svaret i hela droppar/minut",
+        "variables": {
+            "name": ["Anna", "Ali", "Maria", "Omar", "Karin", "Fatima", "Johan", "Aisha", "Erik", "Hassan"],
+            "min": { "min": 20, "max": 30, "step": 5 }
+        },
+        "formula": "100 * 20 / min",
+        "unit": "droppar/min",
+        "tolerance": 0.5,
+        "hints": [
+            "Hur många droppar motsvarar 100 ml?",
+            "Hur många minuter är det?"
+        ],
+        "link": "",
+        "active": true,
+        "round_answer": true
+    },
+    {
+        "category_id": 5,
+        "template": "{name} ska opereras och som antibiotikaprofylax ges Infusion Cloxacillin 2 g. Detta är en torrsubstans som enligt FASS ska blandas med 100 ml NaCl. Infusionen ska ges på {min} minuter, vilken hastighet i ml/h ställer du in på åumpen? Ange svaret i hela ml/h",
+        "variables": {
+            "name": ["Anna", "Ali", "Maria", "Omar", "Karin", "Fatima", "Johan", "Aisha", "Erik", "Hassan"],
+            "min": { "min": 20, "max": 30, "step": 5 }
+        },
+        "formula": "100 / (min / 60)",
+        "unit": "ml/h",
+        "tolerance": 0.5,
+        "hints": [
+            "Hur många ml är det totalt?",
+            "Hur många minuter är det?"
+        ],
+        "link": "",
+        "active": true,
+        "round_answer": true
+    },
+    {
+        "category_id": 5,
+        "template": "{name} ska opereras och som antibiotikaprofylax ges Infusion Cloxacillin 2 g. Detta är en torrsubstans som enligt FASS ska blandas med 100 ml NaCl. Du startade infusionen med infusionshastigheten {flowRate} droppar/min. Efter {min} minuter går {name} infusion subkant, hur många mg Cloxacillin har {name} fått då? svara i hela mg.",
+        "variables": {
+            "name": ["Anna", "Ali", "Maria", "Omar", "Karin", "Fatima", "Johan", "Aisha", "Erik", "Hassan"],
+            "flowRate": [67, 80, 100],
+            "min": { "min": 10, "max": 120, "step": 1 }
+        },
+        "formula": "flowRate * min / 20 / 100 * 2000",
+        "unit": "mg",
+        "tolerance": 0.5,
+        "hints": [
+            "Hur många droppar per minut är det?",
+            "Hur många minuter är det?"
+        ],
+        "link": "",
+        "active": true,
+        "round_answer": true
+    },
+    {
+        "category_id": 5,
+        "template": "Hur lång tid tar det att infundera 1000 ml lösning med en infusionshastighet på {flowRate} droppar/min? (1ml = 20 droppar) Svara i hela timmar och hela minuter.",
+        "variables": {
+            "flowRate": { "min": 30, "max": 150, "step": 1 }
+        },
+        "formula": "1000 * 20 / flowRate * 60",
+        "tolerance": 1,
+        "hints": [
+            "Hur många droppar motsvarar 1000 ml?",
+            "Hur många minuter är det?",
+            "Tänk på att det är 60 minuter på en timme"
+        ],
+        "link": "",
+        "active": true,
+        "answer_type": "duration",
+        "round_to_unit": "min"
+    },
+    {
+        "category_id": 6,
+        "template": "{name} har en pneumoni och behöver syrgas på grimma, {flowRate} liter syrgas per minut. Ni ska nu lämna avdelningen och behöver ha med en transportabel syrgasflaska. Tillgängligt finns en syrgasflaska på {bottleSize} liter med trycket {pressure} bar.\n\nHur länge räcker syrgasen? Utgå från att patientens syrgasbehov förblir oförändrat. Svara i hela timmar och minuter.",
+        "variables": {
+            "name": "$STANDARD_NAMES",
+            "flowRate": { "min": 0.5, "max": 3.0, "step": 0.5 },
+            "bottleSize": [2, 5, 10],
+            "pressure": { "min": 50, "max": 200, "decimals": 0 }
+        },
+        "formula": "bottleSize * pressure / flowRate * 60",
+        "tolerance": 1,
+        "hints": [
+            "Hur många liter komprimerad syrgas finns i flaskan?",
+            "Tänk på att det är 60 minuter per timme"
+        ],
+        "link": "",
+        "active": true,
+        "answer_type": "duration",
+        "round_to_unit": "min"
+    },
+    {
+        "category_id": 6,
+        "template": "Din patient är i behov av syrgas och är därför ordinerad {flowRate} liter/minut. Patienten ska nu på en röntgenundersökning och behöver då syrgastillförsel under transporten. Du hämtar en transportabel syrgasflaska som har en volym på {bottleSize} liter och ett tryck på {pressure} bar.\n\nHur länge räcker syrgasen? Utgå från att patientens syrgasbehov förblir oförändrat. Ange svaret i hela timmar och hela minuter.",
+        "variables": {
+            "flowRate": { "min": 1, "max": 10, "decimals": 0 },
+            "bottleSize": [2, 5, 10],
+            "pressure": { "min": 50, "max": 200, "decimals": 0 }
+        },
+        "formula": "bottleSize * pressure / flowRate * 60",
+        "tolerance": 1,
+        "hints": [
+            "Hur många liter komprimerad syrgas finns i flaskan?",
+            "Tänk på att det är 60 minuter per timme."
+        ],
+        "link": "",
+        "active": true,
+        "answer_type": "duration",
+        "round_to_unit": "min"
+    },
+    {
+        "category_id": 6,
+        "template": "Tillgängligt finns en syrgasflaska på {bottleSize} liter med trycket {pressure} bar. Din patient får syrgas på syrgasgrimma, {flowRate} liter syrgas per minut.\n\nHur länge räcker syrgasen? Svara i hela timmar och hela minuter.",
+        "variables": {
+            "flowRate": { "min": 0.5, "max": 3.0, "step": 0.5 },
+            "bottleSize": [2, 2.5, 3, 5],
+            "pressure": { "min": 50, "max": 200, "decimals": 0 }
+        },
+        "formula": "bottleSize * pressure / flowRate * 60",
+        "tolerance": 1,
+        "hints": [
+            "Hur många liter komprimerad syrgas finns i flaskan?",
+            "Tänk på att det är 60 minuter per timme."
+        ],
+        "link": "",
+        "active": true,
+        "answer_type": "duration",
+        "round_to_unit": "min"
+    },
+    {
+        "category_id": 6,
+        "template": "Din patient är i behov av syrgas och är därför ordinerad {flowRate} liter/minut. Patienten ska nu på en röntgenundersökning och behöver då syrgastillförsel under transporten. Du hämtar en transportabel syrgasflaska som har en volym på {bottleSize} liter och ett tryck på {pressure} bar.\n\nHur länge räcker syrgasen? Utgå från att patientens syrgasbehov förblir oförändrat. Ange svaret i hela timmar och hela minuter.",
+        "variables": {
+            "flowRate": { "min": 1, "max": 12, "decimals": 0 },
+            "bottleSize": [2, 2.5, 3, 5],
+            "pressure": { "min": 50, "max": 200, "decimals": 0 }
+        },
+        "formula": "bottleSize * pressure / flowRate * 60",
+        "tolerance": 1,
+        "hints": [
+            "Hur många liter komprimerad syrgas finns i flaskan?",
+            "Tänk på att det är 60 minuter per timme."
+        ],
+        "link": "",
+        "active": true,
+        "answer_type": "duration",
+        "round_to_unit": "min"
+    },
+    {
+        "category_id": 6,
+        "template": "Du är sjuksköterska på en vårdavdelning och har en patient som behöver syrgas kontinuerligt. Patientens syrgasbehov är {flowRate} liter/minut. Patienten behöver lämna avdelningen för en undersökning. Du hämtar en syrgasflaska med storleken {bottleSize} liter och ett tryck på {pressure} bar.\n\nHur länge kommer syrgasen att räcka? Utgå från att patientens syrgasbehov förblir oförändrat. Svara i hela timmar och hela minuter.",
+        "variables": {
+            "flowRate": { "min": 1, "max": 7, "decimals": 0 },
+            "bottleSize": [2, 2.5, 3, 5],
+            "pressure": { "min": 50, "max": 200, "decimals": 0 }
+        },
+        "formula": "bottleSize * pressure / flowRate * 60",
+        "tolerance": 1,
+        "hints": [
+            "Hur många liter komprimerad syrgas finns i flaskan?",
+            "Tänk på att det är 60 minuter per timme."
+        ],
+        "link": "",
+        "active": true,
+        "answer_type": "duration",
+        "round_to_unit": "min"
+    },
+    {
+        "category_id": 6,
+        "template": "Din patient ska flyttas från den postoperativa avdelningen vid regionsjukhuset till vårdavdelningen vid länssjukhuset. Under transporten behöver han syrgas, {flowRate} liter/minut. Du har två syrgasflaskor, varje flaska rymmer {bottleSize} liter. Den ena manometern visar {pressure1} bar och den andra {pressure2} bar.\n\nHur länge räcker syrgasflaskorna? Ange svaret i hela timmar och hela minuter.",
+        "variables": {
+            "flowRate": { "min": 2, "max": 10, "decimals": 0 },
+            "bottleSize": [5, 10],
+            "pressure1": { "min": 50, "max": 200, "decimals": 0 },
+            "pressure2": { "min": 50, "max": 200, "decimals": 0 }
+        },
+        "formula": "(bottleSize * pressure1 + bottleSize * pressure2) / flowRate * 60",
+        "tolerance": 1,
+        "hints": [
+            "Hur många liter komprimerad syrgas finns i flaskorna?",
+            "Tänk på att det är 60 minuter per timme."
+        ],
+        "link": "",
+        "active": true,
+        "answer_type": "duration",
+        "round_to_unit": "min"
+    },
+    {
+        "category_id": 6,
+        "template": "Du jobbar som sjuksköterska på en vårdavdelning. Du ska tillsammans med en kollega transportera en patient från vårdavdelningen till röntgenavdelningen för en undersökning. Patienten är sängliggande och syrgaskrävande, just nu behövs {flowRate} liter syrgas/minut på öppen mask för att hålla syresättningen över 94%. Du hämtar en transportabel syrgasflaska. Gasflaskas volym är {bottleSize} liter och trycket är {pressure} bar.\n\nHur länge räcker syrgasen? Ange svaret i hela timmar och minuter.",
+        "variables": {
+            "flowRate": { "min": 4, "max": 10, "decimals": 0 },
+            "bottleSize": [2, 2.5, 3, 5],
+            "pressure": { "min": 50, "max": 200, "decimals": 0 }
+        },
+        "formula": "bottleSize * pressure / flowRate * 60",
+        "tolerance": 1,
+        "hints": [
+            "Hur många liter komprimerad syrgas finns i flaskan?",
+            "Tänk på att det är 60 minuter per timme."
+        ],
+        "link": "",
+        "active": true,
+        "answer_type": "duration",
+        "round_to_unit": "min"
+    },
+    {
+        "category_id": 6,
+        "template": "{name}, 22 år, har drabbats av en pneumothorax. Han har andningsvårigheter och behöver transporteras från akutmotagningen till thoraxkirurgiska avdelningen. Under transporten ordineras {name} syrgas {flowRate} liter/minut. En syrgastub på {bottleSize} liter med ett tryck på {pressure} bar används.\n\nHur länge räcker syrgastuben om {name}s syrgasbehov är oförändrat? Ange svaret i hela minuter.",
+        "variables": {
+            "name": ["Ali", "Omar", "Hassan", "kevin", "Johan", "Erik"],
+            "flowRate": { "min": 2, "max": 6, "decimals": 0 },
+            "bottleSize": [2, 2.5, 3, 5],
+            "pressure": { "min": 50, "max": 200, "decimals": 0 }
+        },
+        "formula": "bottleSize * pressure / flowRate * 60",
+        "tolerance": 1,
+        "hints": [
+            "Hur många liter komprimerad syrgas finns i flaskan?",
+            "Tänk på att det är 60 minuter per timme."
+        ],
+        "link": "",
+        "active": true,
+        "answer_type": "duration",
+        "round_to_unit": "min"
+    },
+    {
+        "category_id": 6,
+        "template": "{name} har under en tid vårdats på avdelning 61 i Karlskrona. Hans tillstånd har successivt förbättrats och han bedöms nu vara stabil men vidare undersökningar behöver göras i Lund varför ambulanstransport dit är beställd. I ambulansen finns två syrgasflaskor, flaskorna är lika stora och rymmer {bottleSize} liter vardera. manometertrycket visar {pressure1} bar i den ena flaskan och {pressure2} bar i den andra flaskan. Ordinerad syrgastillförsel är {flowRate} liter/minut.\n\nHur lång tid har ambulansen på sig för att ta sig till Lund innan syrgasen tar slut? Ange ditt svar i hela timmar och hela minuter.",
+        "variables": {
+            "name": ["Ali", "Omar", "Hassan", "kevin", "Johan", "Erik"],
+            "flowRate": { "min": 1, "max": 5, "decimals": 0 },
+            "bottleSize": [2.5, 5, 10],
+            "pressure1": { "min": 50, "max": 200, "decimals": 0 },
+            "pressure2": { "min": 50, "max": 200, "decimals": 0 }
+        },
+        "formula": "(bottleSize * pressure1 + bottleSize * pressure2) / flowRate * 60",
+        "tolerance": 1,
+        "hints": [
+            "Hur många liter komprimerad syrgas finns i flaskorna?",
+            "Tänk på att det är 60 minuter per timme."
+        ],
+        "link": "",
+        "active": true,
+        "answer_type": "duration",
+        "round_to_unit": "min"
+    },
+    {
+        "category_id": 6,
+        "template": "I ambulansen finns två syrgastuber som vardera har volymen {bottleSize} L. Den ena har ett tryck på {pressure1} bar och den andra har ett tryck på {pressure2} bar. Vid en trafikolycka har en person utsatts för kraftigt trauma och har en misstänkt blödning i buken. Den prehospitala personalen kopplar på patienten en reservoarmask med ett flöde på {flowRate} L/min.\n\nHur länge räcker syrgasen med det aktuella syrgasflödet? Ange svaret i hela timmar och hela minuter.",
+        "variables": {
+            "flowRate": { "min": 10, "max": 15, "decimals": 0 },
+            "bottleSize": [5, 10],
+            "pressure1": { "min": 50, "max": 200, "decimals": 0 },
+            "pressure2": { "min": 50, "max": 200, "decimals": 0 }
+        },
+        "formula": "(bottleSize * pressure1 + bottleSize * pressure2) / flowRate * 60",
+        "tolerance": 1,
+        "hints": [
+            "Hur många liter komprimerad syrgas finns i flaskorna?",
+            "Tänk på att det är 60 minuter per timme."
+        ],
+        "link": "",
+        "active": true,
+        "answer_type": "duration",
+        "round_to_unit": "min"
+    },
+    {
+        "category_id": 6,
+        "template": "{name}, 86 år, har lunginflammation och behöver transporteras med ambulans från SÄBO till sjukhuset. Under transporten behöver hon syrgas {flowRate} liter/minut på öppen masl. Ambulansen har en full syrgastub på {bottleSize} liter med ett tryck på {pressure} bar.\n\nHur länge räcker syrgastuben om {name}s syrgasbehov är oförändrat? Ange svaret i hela timmar och hela minuter.",
+        "variables": {
+            "name": ["Anna", "Maria", "Karin", "Aisha", "Erik"],
+            "flowRate": { "min": 4, "max": 10, "decimals": 0 },
+            "bottleSize": [2.5, 5, 10],
+            "pressure": { "min": 50, "max": 200, "decimals": 0 }
+        },
+        "formula": "bottleSize * pressure / flowRate * 60",
+        "tolerance": 1,
+        "hints": [
+            "Hur många liter komprimerad syrgas finns i flaskan?",
+            "Tänk på att det är 60 minuter per timme."
+        ],
+        "link": "",
+        "active": true,
+        "answer_type": "duration",
+        "round_to_unit": "min"
+    }
+]

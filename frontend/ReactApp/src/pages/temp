@@ -1,0 +1,1052 @@
+
+import "./controlpanel.css"
+import Header from "../components/Header";
+import Footer from "../components/footer";
+import Tab from "../components/tab";
+import Button from "../components/Button";
+import LoadingSpinner from "../components/LoadingSpinner";
+//https://www.svgrepo.com/svg/529282/user-hand-up --There were color changes
+//https://www.svgrepo.com/svg/529046/library --There were color changes
+//https://www.svgrepo.com/svg/529151/question-square --There were color changes
+//https://www.svgrepo.com/svg/529235/star-shine --There were color changes
+//https://www.svgrepo.com/svg/529234/square-top-up
+//https://www.svgrepo.com/svg/528846/archive-down
+//https://www.svgrepo.com/svg/528848/archive-up
+//https://www.svgrepo.com/svg/528832/add-circle
+//https://www.svgrepo.com/svg/529799/refresh
+import studentdark from "../assets/student-dark.svg"
+import studentlight from "../assets/student-light.svg"
+import coursesdark from "../assets/courses-dark.svg"
+import courseslight from "../assets/courses-light.svg"
+import questiondark from "../assets/question-dark.svg"
+import questionlight from "../assets/question-light.svg"
+import stardark from "../assets/star-dark.svg"
+import starlight from "../assets/star-light.svg"
+import add from "../assets/add.svg"
+import edit from "../assets/edit.svg"
+import archiveup from "../assets/archive-up.svg"
+import exit from "../assets/exit.svg"
+import archivedown from "../assets/archive-down.svg"
+import refresh from "../assets/refresh.svg"
+import { DarkModeContext } from "../context/DarkModeContext";
+import { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import type { courses } from "./questionselect";
+import { Table } from "lucide-react";
+
+interface Course {
+    course_code: string;
+    id: number;
+    name: string;
+}
+
+interface Question {
+    id: string;
+    excerpt: string;
+    active: boolean;
+}
+
+interface Category {
+    active: boolean;
+    id: number;
+    name: string;
+    courses: Course[];
+    questions: Question[];
+}
+
+interface FullCourse {
+    id: number;
+    course_code: string;
+    name: string;
+    active: boolean;
+    created_at: string;
+    last_updated: string;
+    history: string;
+}
+
+interface FullCategory {
+    id: number;
+    name: string;
+    active: boolean;
+    created_at: string;
+    last_updated: string;
+    history: string;
+}
+
+interface FullQuestion {
+    id: number;
+    template: string;
+    variables: Record<string, unknown>;
+    formula: string;
+    unit: string;
+    tolerance: number | null;
+    hints: string[];
+    link: string;
+    active: boolean;
+}
+
+interface FullUnit {
+    id: number;
+    name: string;
+    active: boolean;
+    created_at: string;
+    last_updated: string;
+}
+
+interface Variable {
+    name: string;
+    type: number;
+    min: number | null;
+    max: number | null;
+    decimals: number | null;
+    step: number | null;
+    arr: string[] | null;
+    depends_on: string[] | null;
+    formula: string | null;
+    names: string[] | string | null; 
+
+}
+
+export default function controlpanel(){
+    const ctx = useContext(DarkModeContext)
+    const navigate = useNavigate();
+    if (!ctx) return null;
+    const { darkMode, toggleDarkMode } = ctx
+    const [tab, setTab] = useState(0);
+    const [selectedCourse, setSelectedCourse] = useState<string>("");
+    const [courses, setCourses] = useState<courses | null>(null);
+    const [categories, setCategories] = useState<Category[] | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [categorydown, setCategoryDown] = useState<boolean[]>([]);
+    const [viewing, setViewing] = useState<boolean | null>(null);
+    // viewingType: 0 = course, 1 = category, 2 = question, 3 = unit, 4 = new course, 5 = new category, 6 = new question, 7 = new unit
+    const [viewingType, setViewingType] = useState<number | null>(null);
+    const [viewingData, setViewingData] = useState<FullCourse | FullCategory | FullQuestion | FullUnit | null>(null);
+    const [categoryToAddQuestionTo, setCategoryToAddQuestionTo] = useState<Category | null>(null);
+
+    // question input states
+    const [questionText, setQuestionText] = useState<string>("");
+    const [questionFormula, setQuestionFormula] = useState<string>("");
+    const [questionUnit, setQuestionUnit] = useState<string>("");
+    const [questionTolerance, setQuestionTolerance] = useState<string>("");
+    const [questionVariables, setQuestionVariables] = useState<Record<string, unknown>>({});
+    const [questionHints, setQuestionHints] = useState<string[]>([]);
+    const [questionLink, setQuestionLink] = useState<string>("");
+
+    // course input states
+    const [courseName, setCourseName] = useState<string>("");
+    const [courseCode, setCourseCode] = useState<string>("");
+    const [courseActive, setCourseActive] = useState<boolean>(true);
+
+    // category input states
+    const [categoryName, setCategoryName] = useState<string>("");
+    const [categoryActive, setCategoryActive] = useState<boolean>(true);
+
+    const [variables, setVariables] = useState<Variable[]>([]);
+
+    const [variableTab, setVariableTab] = useState<number[]>(Array(99).fill(0));
+
+    const [sampledValues, setSampledValues] = useState<Record<string, string|number>>({});
+
+
+    async function get_courses_and_categories(): Promise<courses> {
+        const res = await fetch("/cat_request", {
+            credentials: "include",
+        });
+        const json = await res.json();
+        console.log(json)
+        return json
+    }
+
+    async function get_full_categories(): Promise<Category[] | null> {
+        try {
+            const res = await fetch("/admin/categories_nested", {
+                credentials: "include",
+            });
+            const json = await res.json();
+            console.log("Categories:", json);
+            return json;
+        } catch (error) {
+            console.error("Error fetching categories:", error);
+            return null;
+        }
+    }
+
+    useEffect(() => {
+        async function fetchData() {
+            setIsLoading(true);
+            const courses = await get_courses_and_categories();
+            setCourses(courses);
+            const categories = await get_full_categories();
+            setCategoryDown(Array(categories?.length).fill(false))
+            setCategories(categories);
+            setIsLoading(false);
+        }
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        if (viewingType === 2 && viewingData) {
+            const questionData = viewingData as FullQuestion;
+            setQuestionText(questionData.template || "");
+            setQuestionFormula(questionData.formula || "");
+            setQuestionUnit(questionData.unit || "");
+            setQuestionTolerance(questionData.tolerance?.toString() || "");
+            setQuestionVariables(questionData.variables || {});
+            setQuestionHints(questionData.hints || []);
+            setQuestionLink(questionData.link || "");
+            // Load existing variables from the question data
+            if (questionData.variables && typeof questionData.variables === 'object') {
+                // Convert Record to Variable array
+                const loadedVariables = Object.entries(questionData.variables).map(
+                    ([name, data]: [string, any]) => {
+
+                        let type = 3;
+                        
+                        if (typeof data === 'string' || (Array.isArray(data) && typeof data[0] === 'string')) {
+                        type = 3; // namn
+                        } else if (Array.isArray(data)) {
+                        type = 1; // array type
+                        } else if (data?.formula) {
+                        type = 2; // formula type
+                        } else if (data?.min != null || data?.max != null) {
+                        type = 0; // range type
+                        }
+                        console.log(data)
+                        return {
+                        name,
+                        type,
+                        min: data?.min ?? null,
+                        max: data?.max ?? null,
+                        decimals: data?.decimals ?? null,
+                        step: data?.step ?? null,
+                        arr: Array.isArray(data) && typeof data[0] !== 'string' ? data.map(String) : null,
+                        depends_on: data?.depends_on
+                            ? Array.isArray(data.depends_on)
+                            ? data.depends_on
+                            : [data.depends_on]
+                            : null,
+                        formula: data?.formula ?? null, // keep your internal naming if needed
+                        names: typeof data === 'string' ? data 
+                            : Array.isArray(data) && typeof data[0] === 'string' ? data 
+                            : null,
+                        };
+                    }
+                    );
+                console.log("Loaded variables from data:", loadedVariables);
+                setVariables(loadedVariables);
+                const newTab = Array(99).fill(0);
+
+                loadedVariables.forEach((v, i) => {
+                    newTab[i] = v.type; // assign type at same index
+                });
+
+                setVariableTab(newTab);
+            } else {
+                setVariables([]);
+                setVariableTab(Array(99).fill(0));
+            }
+        } else if (viewingType === 6) {
+            // Reset form for new question
+            setQuestionText("");
+            setQuestionFormula("");
+            setQuestionUnit("");
+            setQuestionTolerance("");
+            setQuestionVariables({});
+            setQuestionHints([]);
+            setQuestionLink("");
+            setVariables([]);
+        } else if (viewingType === 0 && viewingData) {
+            const courseData = viewingData as FullCourse;
+            setCourseName(courseData.name || "");
+            setCourseCode(courseData.course_code || "");
+            setCourseActive(courseData.active || true);
+        } else if (viewingType === 4) {
+            // Reset form for new course
+            setCourseName("");
+            setCourseCode("");
+            setCourseActive(true);
+        } else if (viewingType === 1 && viewingData) {
+            const categoryData = viewingData as FullCategory;
+            setCategoryName(categoryData.name || "");
+            setCategoryActive(categoryData.active || true);
+        } else if (viewingType === 5) {
+            // Reset form for new category
+            setCategoryName("");
+            setCategoryActive(true);
+        }
+    }, [viewingData, viewingType]);
+
+    function get_course_question_count(course: string, data: courses): number {
+        return Object.values(data.max_questions[course]).reduce((sum, count) => sum + count, 0);
+    }
+
+    // DECOUPLED QUESTION TEXT FROM VARIABLE LIST, TO ADD NEW VARIABLE "+ NY VARIABEL" IS THE ONLY WAY
+
+    // function handle_question_text_change(text: string) {
+    //     let extractedVariables: string[] = [];
+    //     const variableRegex = /{(\w+)}/g;
+    //     let match;
+    //     while ((match = variableRegex.exec(text)) !== null) {
+    //         const varName = match[1];
+    //         if (!extractedVariables.includes(varName)) {
+    //             extractedVariables.push(varName);
+    //         }
+    //     }
+
+    //     // Merge with existing variables: keep existing ones that are still in the text, add new ones
+    //     setVariables(prevVariables => {
+    //         const merged = [...prevVariables];
+            
+    //         // Remove variables that are no longer in the text
+    //         const updated = merged.filter(v => extractedVariables.includes(v.name));
+            
+    //         // Add new variables that don't exist yet
+    //         extractedVariables.forEach(varName => {
+    //             if (!updated.some(v => v.name === varName)) {
+    //                 updated.push({
+    //                     name: varName,
+    //                     type: 0,
+    //                     min: null,
+    //                     max: null,
+    //                     decimals: null,
+    //                     step: null,
+    //                     arr: null,
+    //                     depends_on: null,
+    //                     formula: null,
+    //                     names: null
+    //                 });
+    //             }
+    //         });
+            
+    //         return updated;
+    //     });
+
+
+
+    //     console.log("Updated variables based on text:", variables);
+    // }
+
+    function get_stats(){
+        const students = 134;
+        const courseCount = courses ? Object.keys(courses.courses).length : 0;
+        const questionCount = categories ? categories.reduce((sum, cat) => sum + cat.questions.length, 0) : 0;
+        const correct = 78;
+
+        return(
+            <div className="general-stats">
+                <div className="stat-panel">
+                    <img src={darkMode ? studentdark : studentlight} alt="student" />
+                    <div className="stat-panel-text">
+                        <p>Studenter</p>
+                        <span>{students}</span>
+                    </div>
+                </div>
+                <div className="vl"></div>
+                <div className="stat-panel">
+                    <img src={darkMode ? coursesdark : courseslight} alt="courses" />
+                    <div className="stat-panel-text">
+                        <p>kurser</p>
+                        <span>{courseCount}</span>
+                    </div>
+                </div>
+                <div className="vl"></div>
+                <div className="stat-panel">
+                    <img src={darkMode ? questiondark : questionlight} alt="questions" />
+                    <div className="stat-panel-text">
+                        <p>Frågor</p>
+                        <span>{questionCount}</span>
+                    </div>
+                </div>
+                <div className="vl"></div>
+                <div className="stat-panel">
+                    <img src={darkMode ? stardark : starlight} alt="correct" />
+                    <div className="stat-panel-text">
+                        <p>rätt</p>
+                        <span>{correct}%</span>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    function handle_category_expand(index:number){
+        setCategoryDown(prev => {
+            const newState = [...prev]
+            newState[index] = !newState[index]
+            return newState
+        })
+    }
+    async function getEntity(type: number, id: string) {
+        try {
+            console.log(`Using route: /admin/entity/${type}/${id}`);
+            const res = await fetch(`/admin/entity/${type}/${id}`, {
+                credentials: "include",
+            });
+            const json = await res.json();
+            console.log("entity:", json);
+            return json;
+        } catch (error) {
+            console.error("Error fetching entity:", error);
+            return null;
+        }
+    }
+
+    function openViewing(type: number, id: string | null){
+        setViewing(true);
+        setViewingType(type);
+        if(id){
+            getEntity(type, id).then(data => {
+                setViewingData(data);
+            });
+        } else {
+            switch(type){
+                case 4:
+                    setViewingData({
+                        id: 0,
+                        course_code: "",
+                        name: "",
+                        active: true,
+                        created_at: null as any,
+                        last_updated: null as any,
+                        history: ""
+                    });
+                    break;
+                case 5:
+                    setViewingData({
+                        id: 0,
+                        name: "",
+                        active: true,
+                        created_at: null as any,
+                        last_updated: null as any,
+                        history: ""
+                    });
+                    break;
+                case 6:
+                    setViewingData({
+                        id: 0,
+                        template: "",
+                        variables: {},
+                        formula: "",
+                        unit: "",
+                        tolerance: null,
+                        hints: [],
+                        link: "",
+                        active: true
+                    });
+                    break;
+                case 7:
+                    setViewingData({
+                        id: 0,
+                        name: "",
+                        active: true,
+                        created_at: null as any,
+                        last_updated: null as any
+                    });
+                    break;
+            }
+        }
+    }
+
+    function closeViewing() {
+        setViewing(null);
+        setViewingType(null);
+        setViewingData(null);
+        
+        // Reset question form
+        setQuestionText("");
+        setQuestionFormula("");
+        setQuestionUnit("");
+        setQuestionTolerance("");
+        setQuestionVariables({});
+        setQuestionHints([]);
+        setQuestionLink("");
+        setVariables([]);
+        
+        // Reset course form
+        setCourseName("");
+        setCourseCode("");
+        setCourseActive(true);
+        
+        // Reset category form
+        setCategoryName("");
+        setCategoryActive(true);
+
+
+        if (window.history.state?.viewing) {
+            window.history.back();
+        }
+    }
+
+    function updateVariablesAndSample(updater: (prev: Variable[]) => Variable[]) {
+        const newVars = updater(variables);
+        setVariables(newVars);
+        // Manually update sampled values with the new variables
+        const result: Record<string, string|number> = {};
+        newVars.forEach(v => {
+            if (v.type === 0) {
+                const min = v.min ?? 0, max = v.max ?? 100, step = v.step ?? 1;
+                const dec = v.decimals ?? 0;
+                const val = min + Math.floor(Math.random() * (Math.floor((max-min)/step)+1)) * step;
+                result[v.name] = parseFloat(val.toFixed(dec));
+            } else if (v.type === 1) {
+                const arr = v.arr ?? []; result[v.name] = arr[Math.floor(Math.random()*arr.length)] ?? "";
+            } else if (v.type === 3) {
+                const std = ["Anna","Erik","Maria","Johan","Lisa"];
+                const pool = typeof v.names === 'string' ? std : (v.names ?? std);
+                result[v.name] = pool[Math.floor(Math.random()*pool.length)];
+            }
+        });
+        newVars.forEach(v => {
+            if (v.type === 2 && v.formula) {
+                try {
+                    let expr = v.formula;
+                    Object.entries(result).forEach(([n,val]) => { expr = expr.replaceAll(n, String(val)); });
+                    result[v.name] = parseFloat(eval(expr).toFixed(v.decimals ?? 0));
+                } catch { result[v.name] = "?"; }
+            }
+        });
+        setSampledValues(result);
+    }
+
+    function change_var_type(index: number, newType: number) {
+        setVariables(prev => {
+            const newVars = [...prev];
+            const variable = newVars[index];
+            if (!variable) return prev;
+            variable.type = newType;
+            return newVars;
+        });
+    }
+
+    function get_var_chip_class(type: number): string {
+    return ["var-chip-interval","var-chip-lista","var-chip-formel","var-chip-namn", "var-chip-klockslag"][type] ?? "var-chip-interval";
+    }
+
+    function sample_variables(): Record<string, string|number> {
+        const result: Record<string, string|number> = {};
+        // Pass 1: non-formula
+        variables.forEach(v => {
+            if (v.type === 0) {
+                const min = v.min ?? 0, max = v.max ?? 100, step = v.step ?? 1;
+                const dec = v.decimals ?? 0;
+                const val = min + Math.floor(Math.random() * (Math.floor((max-min)/step)+1)) * step;
+                result[v.name] = parseFloat(val.toFixed(dec));
+            } else if (v.type === 1) {
+                const arr = v.arr ?? []; result[v.name] = arr[Math.floor(Math.random()*arr.length)] ?? "";
+            } else if (v.type === 3) {
+                const std = ["Anna","Erik","Maria","Johan","Lisa"];
+                const pool = typeof v.names === 'string' ? std : (v.names ?? std);
+                result[v.name] = pool[Math.floor(Math.random()*pool.length)];
+            }
+        });
+        // Pass 2: formula
+        variables.forEach(v => {
+            if (v.type === 2 && v.formula) {
+                try {
+                    let expr = v.formula;
+                    Object.entries(result).forEach(([n,val]) => { expr = expr.replaceAll(n, String(val)); });
+                    result[v.name] = parseFloat(eval(expr).toFixed(v.decimals ?? 0));
+                } catch { result[v.name] = "?"; }
+            }
+        });
+        return result;
+    }
+
+    useEffect(() => { 
+        setSampledValues(sample_variables()); 
+    }, [variables]);
+
+    function eval_formula(formula: string, vals: Record<string, string|number>): string {
+        try {
+            let expr = formula;
+            Object.entries(vals).forEach(([n,val]) => { expr = expr.replaceAll(n, String(val)); });
+            return String(parseFloat(eval(expr).toFixed(10)));
+        } catch { return "?"; }
+    }
+
+    function render_preview(text: string, vals: Record<string, string|number>): React.ReactNode[] {
+        const out: React.ReactNode[] = [];
+        const rx = /\{(\w+)\}/g;
+        let last = 0, i = 0, m;
+        while ((m = rx.exec(text)) !== null) {
+            if (m.index > last) out.push(<span key={`t${i++}`}>{text.slice(last, m.index)}</span>);
+            out.push(<strong key={`v${i++}`} style={{background:"rgba(0,0,0,0.1)",padding:"0.1rem 0.5rem",borderRadius:"6px"}}>{vals[m[1]] ?? `{${m[1]}}`}</strong>);
+            last = rx.lastIndex;
+        }
+        if (last < text.length) out.push(<span key={`t${i++}`}>{text.slice(last)}</span>);
+        return out;
+    }
+
+    function get_course_panel(){
+        return courses == null || Object.keys(courses.courses).length == 0 ? (
+            <h1>Fann inga kurser</h1>
+        ) : (
+        <div className="course-grid" onWheel={(e) => {
+            const el = e.currentTarget;
+
+            if (el.scrollWidth <= el.clientWidth) return;
+
+            e.preventDefault();
+
+            const speed = 2; // adjust this
+            el.scrollLeft -= e.deltaY * speed;
+        }}>
+            {Object.keys(courses.courses).map((c) => (
+                <label
+                    key={c}
+                    className={`card course-card ${selectedCourse === c ? "selected" : ""}`}
+                >
+                    <input
+                    type="radio"
+                    name="course"
+                    value={c}
+                    checked={selectedCourse === c}
+                    onChange={() => setSelectedCourse(c)}
+                    />
+                    <div className="course-info">
+                    <span className="course-code">{c}</span>
+                    <span className="course-name">{courses.courses[c].name}</span>
+                    <span className="course-qcount">{get_course_question_count(c, courses)} frågor</span>
+                    </div>
+                </label>
+                ))}
+        </div>
+        )
+    }
+
+    function get_category_panel(){
+        return( categories == null || categories.length == 0 ? (
+            <h1>Fann inga kategorier</h1>
+        ) : (
+            <div className="category-dropdowns">
+                <table>
+                    <thead className="category-table-main-header">
+                        <tr>
+                            <th>Namn</th>
+                            <th>Kategorin innegår i dessa kurser</th>
+                            <th>Mängd frågor</th>
+                            <th>Status</th>
+                            <th>Åtgärder</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {categories.map((cat:Category, i:number) =>(
+                            <>
+                            <tr key={cat.id} className={`secondary-table-header ${categorydown[i] ? "selected-header" : ""}`} onClick={()=>handle_category_expand(i)}>
+                                <td>{cat.name}</td>
+                                <td>{cat.courses.map((c:Course) => (
+                                    <span key={c.id} className="c-code-table">{c.course_code} </span>
+                                ))}</td>
+                                <td>{cat.questions.length}</td>
+                                <td><span className={cat.active ? "status active" : "status archived"}>{cat.active ? "Aktiv" : "Arkiverad"}</span></td>
+                                <td>
+                                    <button className="table-button new-question-button" onClick={(e) => {
+                                        e.stopPropagation();
+                                        setCategoryToAddQuestionTo(cat);
+                                        openViewing(6, null);
+                                    }}><img src={add} alt="Lägg till fråga" /></button>
+                                    <button className="table-button edit-button" onClick={(e) => {
+                                        e.stopPropagation();
+                                        openViewing(1, cat.id.toString());
+                                    }}><img src={edit} alt="Redigera" /></button>
+                                    <button className="table-button archive-button" onClick={(e) => {
+                                        e.stopPropagation();
+                                    }}><img src={archivedown} alt="Arkivera" /></button>
+                                </td>
+                            </tr>
+                            {categorydown[i] && 
+                                <tr key={`expanded-${cat.id}`}>
+                                    <td colSpan={5}>
+                                        <table className="expanded-questions-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Fråga</th>
+                                                    <th>Status</th>
+                                                    <th>Åtgärder</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {cat.questions.map((q: Question) => (
+                                                    <tr key={q.id}>
+                                                        <td>{q.id}</td>
+                                                        <td>{q.excerpt}</td>
+                                                        <td><span className={q.active ? "status active" : "status archived"}>{q.active ? "Aktiv" : "Arkiverad"}</span></td>
+                                                        <td className="table-buttons">
+                                                            <button className="table-button edit-button" onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setCategoryToAddQuestionTo(cat);
+                                                                openViewing(2, q.id.toString());
+                                                            }}><img src={edit} alt="Redigera" /></button>
+                                                            <button className="table-button archive-button" onClick={(e) => {
+                                                                e.stopPropagation();
+                                                            }}><img src={archivedown} alt="Arkivera" /></button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            }
+                            </>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        ))
+    }
+
+    return(
+        <>
+        {viewing && (
+            <div className="overlay" onClick={(e) => {e.target == e.currentTarget ? closeViewing(): {}}}>
+                <div className="viewing-popup-control">
+                    {viewingType === null || !viewingData ? (
+                        <LoadingSpinner />
+                    ) : (
+                        <>
+                            {viewingType === 0 || viewingType === 4 ? <h1>Kurs</h1> 
+                            
+                            : null}
+                            {viewingType === 1 || viewingType === 5 ? <h1>Kategori</h1> 
+                            
+                            : null}
+                            {viewingType === 2 || viewingType === 6 ? 
+                            <div className="question-preview">
+                                <div className="question-viewing-header">
+                                    <div className="question-viewing-header-left">
+                                        <h3>{viewingType === 2 ? "Redigera Fråga" : "Ny Fråga"}</h3>
+                                        <div>
+                                            <p>I kategorin</p>
+                                            <span className="c-code-table">{categoryToAddQuestionTo?.name}</span>
+                                        </div>
+                                    </div>
+                                    <div className="question-viewing-header-center">
+                                        <Button text={viewingType === 2 ? "Spara" : "Lägg till"} onClick={() => {}} />
+                                    </div>
+                                    <div className="question-viewing-header-right">
+                                        <button onClick={()=>closeViewing()} className="table-button">
+                                            <img src={exit} alt="Stäng" />
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="question-viewing-body">
+                                    <div className="question-body-lhs">
+                                        <label htmlFor="qtext">FRÅGETEXT</label>
+                                        <textarea name="questiontext" id="qtext" value={questionText} onChange={(e) => {setQuestionText(e.target.value);}} spellCheck={false}></textarea>
+                                        <hr />
+                                            <div className="variables-section">
+                                                <div className="preview-header">
+                                                    <label>VARIABLER ({variables.length})</label>
+                                                    <span className="variable-type-legend">
+                                                        <span style={{color:"#e07b39"}}>↔ Intervall</span>
+                                                        <span style={{color:"#3dab6e"}}>≡ Lista</span>
+                                                        <span style={{color:"#7c5cbf"}}>ƒ Formel</span>
+                                                        <span style={{color:"#3b7dd8"}}>@ Namn</span>
+                                                        <span style={{color:"#db6767"}}> Klockslag</span>
+                                                    </span>
+                                                </div>
+                                                <div className="variables-name">
+                                                     {variables.map((variable, index) => (
+                                                    <span key={index} className={`c-code-table ${get_var_chip_class(variable.type)} variable-clickable`}
+                                                        onClick={() => document.getElementById(`varname-${index}`)?.focus()}>
+                                                        • {variable.name}
+                                                    </span>
+                                                ))}
+                                                <span className="c-code-table variable-add-button"
+                                                    onClick={() => {
+                                                        const name = prompt("Variabelnamn:");
+                                                        if(name && !variables.some(v=>v.name===name)){
+                                                            updateVariablesAndSample(prev=>[...prev,{name,type:0,min:null,max:null,decimals:null,step:null,arr:null,depends_on:null,formula:null,names:null}]);
+                                                        }
+                                                    }}>+ Ny variabel</span>
+                                                </div>
+                                                {variables.map((variable, index) => (
+                                                    <div key={index} className="variable-edit-section">
+                                                        <input id={`varname-${index}`}
+                                                            className={`c-code-table ${get_var_chip_class(variable.type)} variable-input-chip`}
+                                                            value={`• ${variable.name}`}
+                                                            onChange={(e) => {
+                                                                const newName = e.target.value.replace(/^•\s*/,"").trim();
+                                                                const oldName = variables[index].name;
+                                                                setVariables(prev => {
+                                                                    const nv=[...prev]; nv[index]={...nv[index],name:newName}; return nv;
+                                                                });
+                                                                setQuestionText(prev => prev.replaceAll(`{${oldName}}`, `{${newName}}`));
+                                                            }} />
+                                                        <div className="variable-types">
+                                                            <Tab text="Interval" on_Click={() => {change_var_type(index, 0), setVariableTab(prev => { const newTabs = [...prev]; newTabs[index] = 0; return newTabs; })}} selected={variableTab[index] === 0}></Tab>
+                                                            <Tab text="Lista" on_Click={() => {change_var_type(index, 1), setVariableTab(prev => { const newTabs = [...prev]; newTabs[index] = 1; return newTabs; })}} selected={variableTab[index] === 1}></Tab>
+                                                            <Tab text="Formel" on_Click={() => {change_var_type(index, 2), setVariableTab(prev => { const newTabs = [...prev]; newTabs[index] = 2; return newTabs; })}} selected={variableTab[index] === 2}></Tab>
+                                                            <Tab text="Namn" on_Click={() => {change_var_type(index, 3), setVariableTab(prev => { const newTabs = [...prev]; newTabs[index] = 3; return newTabs; })}} selected={variableTab[index] === 3}></Tab>
+                                                        </div>
+                                                        {variableTab[index] === 0 && (
+                                                            <div className="variable-interval">
+                                                                <div className="label-and-box">
+                                                                    <label htmlFor={`min-${index}`}>Min</label>
+                                                                    <input id={`min-${index}`} type="number" value={variable.min ?? ""} onChange={(e) => {
+                                                                        const newMin = e.target.value === "" ? null : parseFloat(e.target.value);
+                                                                        setVariables(prev => {
+                                                                            const newVars = [...prev];
+                                                                            newVars[index] = {
+                                                                                ...newVars[index],
+                                                                                min: newMin
+                                                                            };
+                                                                            return newVars;
+                                                                        });
+                                                                    }} />
+                                                                </div>
+                                                                <div className="label-and-box">
+                                                                    <label htmlFor={`max-${index}`}>Max</label>
+                                                                    <input id={`max-${index}`} type="number" value={variable.max ?? ""} onChange={(e) => {
+                                                                        const newMax = e.target.value === "" ? null : parseFloat(e.target.value);
+                                                                        setVariables(prev => {
+                                                                            const newVars = [...prev];
+                                                                            newVars[index] = {
+                                                                                ...newVars[index],
+                                                                                max: newMax
+                                                                            };
+                                                                            return newVars;
+                                                                        });
+                                                                    }} />
+                                                                </div>
+                                                                <div className="label-and-box">
+                                                                    <label htmlFor={`step-${index}`}>Step</label>
+                                                                    <input id={`step-${index}`} type="number" value={variable.step ?? ""} onChange={(e) => {
+                                                                        const newStep = e.target.value === "" ? null : parseFloat(e.target.value);
+                                                                        setVariables(prev => {
+                                                                            const newVars = [...prev];
+                                                                            newVars[index] = {
+                                                                                ...newVars[index],
+                                                                                step: newStep
+                                                                            };
+                                                                            return newVars;
+                                                                        });
+                                                                    }} />
+                                                                </div>
+                                                                <div className="label-and-box">
+                                                                    <label htmlFor={`decimals-${index}`}>Decimals</label>
+                                                                    <input id={`decimals-${index}`} type="number" value={variable.decimals ?? ""} onChange={(e) => {
+                                                                        const newDecimals = e.target.value === "" ? null : parseFloat(e.target.value);
+                                                                        setVariables(prev => {
+                                                                            const newVars = [...prev];
+                                                                            newVars[index] = {
+                                                                                ...newVars[index],
+                                                                                decimals: newDecimals
+                                                                            };
+                                                                            return newVars;
+                                                                        });
+                                                                    }} />
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                        {variableTab[index] === 1 && (
+                                                            <div className="variable-lista">
+                                                                <div className="label-and-box">
+                                                                    <label htmlFor={`list-${index}`}>Värden (komma-separerade)</label>
+                                                                    <input id={`list-${index}`} type="text" value={variable.arr ? variable.arr.join(",") : ""} onChange={(e) => {
+                                                                        const newArr = e.target.value.split(",").map(s => s.trim());
+                                                                        setVariables(prev => {
+                                                                            const newVars = [...prev];
+                                                                            newVars[index] = {
+                                                                                ...newVars[index],
+                                                                                arr: newArr
+                                                                            };
+                                                                            return newVars;
+                                                                        });
+                                                                    }} />
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                        {variableTab[index] === 2 && (
+                                                            <div className="variable-funktion">
+                                                                <div className="label-and-box">
+                                                                    <label htmlFor={`depends-on-${index}`}>Beror på (variabler)</label>
+                                                                    <input id={`depends-on-${index}`} type="text" value={variable.depends_on ? variable.depends_on.join(",") : ""} onChange={(e) => {
+                                                                        const newDependsOn = e.target.value.split(",").map(s => s.trim());
+                                                                        setVariables(prev => {
+                                                                            const newVars = [...prev];
+                                                                            newVars[index] = {
+                                                                                ...newVars[index],
+                                                                                depends_on: newDependsOn
+                                                                            };
+                                                                            return newVars;
+                                                                        });
+                                                                    }} />
+                                                                </div>
+                                                                <div className="label-and-box">
+                                                                    <label htmlFor={`formula-${index}`}>Formel</label>
+                                                                    <input id={`formula-${index}`} type="text" value={variable.formula || ""} onChange={(e) => {
+                                                                        const newFormula = e.target.value;
+                                                                        setVariables(prev => {
+                                                                            const newVars = [...prev];
+                                                                            newVars[index] = {
+                                                                                ...newVars[index],
+                                                                                formula: newFormula
+                                                                            };
+                                                                            return newVars;
+                                                                        });
+                                                                    }} />
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                        {variableTab[index] === 3 && (
+                                                            <div className="variable-name">
+                                                                <div className="label-and-box">
+                                                                    <label htmlFor={`standard-names-${index}`}>Använd Standardnamn</label>
+                                                                    <input id={`standard-names-${index}`} type="checkbox" checked={typeof variable.names === 'string'} onChange={(e) => {
+                                                                        const checked = e.target.checked;
+                                                                        setVariables(prev => {
+                                                                            const newVars = [...prev];
+                                                                            newVars[index] = {
+                                                                                ...newVars[index],
+                                                                                names: checked ? "$STANDARD_NAMES" : []
+                                                                            };
+                                                                            return newVars;
+                                                                        });
+                                                                    }} />
+                                                                    {typeof variable.names !== 'string' && (
+                                                                        <div className="label-and-box">
+                                                                            <label htmlFor={`variable-names-${index}`}>Använd Anpassade Namn</label>
+                                                                            <input id={`variable-names-${index}`} type="text" value={Array.isArray(variable.names) ? variable.names.join(', ') : ''} onChange={(e) => {
+                                                                                const value = e.target.value;
+                                                                                setVariables(prev => {
+                                                                                    const newVars = [...prev];
+                                                                                    newVars[index] = {
+                                                                                        ...newVars[index],
+                                                                                        names: value.split(',').map((v) => v.trim())
+                                                                                    };
+                                                                                    return newVars;
+                                                                                });
+                                                                            }} />
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        <hr />
+                                        <div className="variable-edit-section">
+                                            <span className="c-code-table">Beräkning av Rätt Svar</span>
+                                            <div className="label-and-box">
+                                                <label htmlFor="answer-formula">Svars Formel</label>
+                                                <input id="answer-formula" type="text" value={questionFormula} onChange={(e) => setQuestionFormula(e.target.value)} />
+                                            </div>
+                                            <div className="variable-interval">
+                                                <div className="label-and-box">
+                                                    <label htmlFor="unit">Enhet</label>
+                                                    <input id="unit" type="text" value={questionUnit} onChange={(e) => setQuestionUnit(e.target.value)} />
+                                                </div>
+                                                <div className="label-and-box">
+                                                    <label htmlFor="tolerance">Tolerans</label>
+                                                    <input id="tolerance" type="text" value={questionTolerance} onChange={(e) => setQuestionTolerance(e.target.value)} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div className="variable-edit-section">
+                                            <div className="question-hints-header">
+                                                <span className="c-code-table">Ledtrådar</span>
+                                                <button className="table-button add-hint-button" onClick={() => setQuestionHints(prev => [...prev, ""])}><img src={add} alt="Lägg till ledtråd" /></button>
+                                            </div>
+                                            
+                                            {questionHints.map((hint, index) => (
+                                                <div key={index} className="label-and-box">
+                                                    <label htmlFor={`hint-${index}`}>Ledtråd {index + 1}</label>
+                                                    <div className="hint-and-delete">
+                                                        <input id={`hint-${index}`} type="text" value={hint} onChange={(e) => {
+                                                            const newHint = e.target.value;
+                                                            setQuestionHints(prev => {
+                                                                const newHints = [...prev];
+                                                                newHints[index] = newHint;
+                                                                return newHints;
+                                                            });
+                                                        }}/>
+                                                        <button className="table-button" onClick={() => {
+                                                            setQuestionHints(prev => prev.filter((_, i) => i !== index));
+                                                        }}><img src={exit} alt="Ta bort ledtråd" /></button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <hr />
+                                        <div className="variable-edit-section">
+                                            <span className="c-code-table">Hjälp Länk</span>
+                                            <div className="label-and-box">
+                                                <label htmlFor="question-link">URL</label>
+                                                <input id="question-link" type="text" value={questionLink} placeholder="tex: 'https://fass.se'" onChange={(e) => setQuestionLink(e.target.value)} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="question-body-rhs">
+                                        <div className="variable-edit-section">
+                                            <div className="preview-header">
+                                                <label className="c-code-table">FÖRHANDSGRANSKNING</label>
+                                                <button className="table-button refresh-preview-button"
+                                                    onClick={() => setSampledValues(sample_variables())}>
+                                                    <img src={refresh} alt="Slumpa nya värden" />
+                                                </button>
+                                            </div>
+                                            <div className="preview-text">
+                                                {render_preview(questionText, sampledValues)}
+                                            </div>
+                                        </div>
+                                        {questionFormula && (
+                                            <div className="variable-edit-section answer-section">
+                                                <div className="answer-labels">
+                                                    <label className="c-code-table">RÄTT SVAR</label>
+                                                    <label className="c-code-table">TOLERANS</label>
+                                                </div>
+                                                <div className="answer-values">
+                                                    <span><strong className="answer-value">{eval_formula(questionFormula, sampledValues)}</strong> <span className="answer-unit">{questionUnit}</span></span>
+                                                    <strong className="answer-tolerance">± {questionTolerance || 0}</strong>
+                                                </div>
+                                                <code className="answer-formula-code">{questionFormula} = {eval_formula(questionFormula, sampledValues)}</code>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                            :null}
+                            {viewingType === 3 || viewingType === 7 ? <h1>Enhet</h1> 
+                            
+                            : null}
+                        </>
+                    )}
+                </div>
+            </div>
+        )}
+            <div className="maindiv-control">
+                {isLoading ? (
+                    <LoadingSpinner />
+                ) : (
+                    <div className="main-controlpanel">
+                        {get_stats()}
+                        <div className="changing-panel">
+                            <div className="changing-panel-header">
+                                <div className="cp-tabs">
+                                    <Tab text="Kurser" selected={tab != 1 && tab != 2} on_Click={()=>setTab(0)} expand="horizontal"></Tab>
+                                    <Tab text="Kategorier / Frågor" selected={tab == 1} on_Click={()=>setTab(1)} expand="horizontal"></Tab>
+                                    <Tab text="Enheter" selected={tab == 2} on_Click={()=>setTab(2)} expand="horizontal"></Tab>
+                                </div>
+                                <div className="add-new-button">
+                                    {tab != 1 && tab != 2 && <Button text="Lägg till ny kurs" onClick={()=>{}}></Button>}
+                                    {tab == 1 && <Button text="Lägg till ny kategori" onClick={()=>{}}></Button>}
+                                    {tab == 2 && <Button text="Lägg till ny enhet" onClick={()=>{}}></Button>}
+                                </div>
+                            </div>
+                            {tab != 1 && tab != 2 && get_course_panel()}
+                            {tab == 1 && get_category_panel()}
+                            {tab == 2 && <h1>Enheter</h1>}
+                        </div>
+                    </div>
+                )}
+            </div>
+            <Footer></Footer>
+        </>
+    )
+}

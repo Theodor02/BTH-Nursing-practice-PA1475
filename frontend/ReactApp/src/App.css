@@ -1,0 +1,59 @@
+/* Återställ webbläsarens standardmarginaler */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Huvudcontainern som sätter bakgrunden för hela sidan */
+.App {
+  min-height: 100vh;
+  width: 100%;
+  font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body{
+  background: var(--panel-gradient);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  padding-top: 8vh;
+  margin: 0;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: whitesmoke;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border);
+}
+
+@-moz-document url-prefix() {
+  * {
+    scrollbar-width: thick;
+    scrollbar-color: var(--accent) whitesmoke;
+  }
+
+  *:hover {
+    scrollbar-color: var(--accent) whitesmoke;
+  }
+}

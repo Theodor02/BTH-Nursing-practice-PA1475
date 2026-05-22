@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Microsoft Sign-In</title>
+  </head>
+  <body>
+    <script>
+      (function () {
+        function getResponsePayload() {
+          const hash = window.location.hash.startsWith("#")
+            ? window.location.hash.slice(1)
+            : window.location.hash;
+          const query = window.location.search.startsWith("?")
+            ? window.location.search.slice(1)
+            : window.location.search;
+
+          const hashParams = new URLSearchParams(hash);
+          const queryParams = new URLSearchParams(query);
+          const hasResponseInHash = hashParams.has("state");
+          const hasResponseInQuery = queryParams.has("state");
+
+          if (hasResponseInHash && hasResponseInQuery) {
+            return query + hash;
+          }
+
+          if (hasResponseInHash) {
+            return hash;
+          }
+
+          if (hasResponseInQuery) {
+            return query;
+          }
+
+          return "";
+        }
+
+        function decodeState(state) {
+          const libraryState = (state || "").split("|")[0];
+          const normalized = libraryState.replace(/-/g, "+").replace(/_/g, "/");
+          const padding = normalized.length % 4;
+          const padded =
+            normalized + (padding ? "=".repeat(4 - padding) : "");
+          return JSON.parse(window.atob(padded));
+        }
+
+        try {
+          const payload = getResponsePayload();
+          if (!payload) {
+            window.close();
+            return;
+          }
+
+          const params = new URLSearchParams(payload);
+          const state = params.get("state");
+          if (!state) {
+            window.close();
+            return;
+          }
+
+          const parsedState = decodeState(state);
+          const channelId =
+            parsedState && typeof parsedState.id === "string"
+              ? parsedState.id
+              : "";
+
+          if (channelId && typeof BroadcastChannel !== "undefined") {
+            const channel = new BroadcastChannel(channelId);
+            channel.postMessage({ v: 1, payload: payload });
+            channel.close();
+          }
+
+          if (
+            window.history &&
+            typeof window.history.replaceState === "function"
+          ) {
+            window.history.replaceState(
+              null,
+              "",
+              window.location.origin + window.location.pathname
+            );
+          }
+
+          window.close();
+        } catch (_error) {
+          document.body.textContent =
+            "Inloggningen slutf\u00f6rdes men popupf\u00f6nstret kunde inte st\u00e4ngas automatiskt.";
+        }
+      })();
+    </script>
+  </body>
+</html>
