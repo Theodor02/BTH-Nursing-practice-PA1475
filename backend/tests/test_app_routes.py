@@ -11,7 +11,7 @@ def test_ping_returns_pong(client):
 def _login(client):
     """Login by sending a mock bearer token in the Authorization header."""
     return client.post(
-        "/login",
+        "/api/auth/login",
         headers={"Authorization": "Bearer mock-token-for-testing"},
     )
 
@@ -28,7 +28,7 @@ def test_login_sets_server_session_and_returns_user_data(client):
         "role": "Student",
     }
 
-    protected_response = client.get("/session_request")
+    protected_response = client.get("/api/sessions")
     assert protected_response.status_code == 200
     assert protected_response.get_json()["user_id"] == 1
 
@@ -41,6 +41,7 @@ def test_login_same_user_does_not_affect_pending_attempts(client):
         user_id=1,
         course_id=7,
         category_id=42,
+        category_ids=[42],
         question_snapshots={"q1": {"id": "q1"}},
     )
 
@@ -52,8 +53,8 @@ def test_login_same_user_does_not_affect_pending_attempts(client):
 
 def test_login_rejects_missing_authorization_header(client):
     """Test that login rejects requests without Authorization header."""
-    response = client.post("/login")
-    
+    response = client.post("/api/auth/login")
+
     assert response.status_code == 401
     assert "Missing Authorization header" in response.get_json()["error"]
 
@@ -61,16 +62,16 @@ def test_login_rejects_missing_authorization_header(client):
 def test_logout_clears_session(client):
     _login(client)
 
-    response = client.post("/logout")
+    response = client.post("/api/auth/logout")
 
     assert response.status_code == 200
     assert response.get_json() == {"ok": True}
-    assert client.get("/session_request").status_code == 401
+    assert client.get("/api/sessions").status_code == 401
 
 
 def test_csrf_origin_blocks_disallowed_post(client):
     response = client.post(
-        "/logout",
+        "/api/auth/logout",
         json={},
         headers={"Origin": "https://evil.example"},
     )
@@ -87,7 +88,7 @@ def test_not_found_and_method_not_allowed_return_json(client):
     assert response.status_code == 200
     assert response.get_json() == {"message": "Login endpoint"}
 
-    response = client.delete("/logout")
+    response = client.delete("/api/auth/logout")
     assert response.status_code == 405
     assert response.get_json() == {"error": "Method not allowed"}
 
@@ -102,25 +103,25 @@ def test_internal_error_handler_returns_json(app_module):
 
 
 def test_session_routes_require_authentication(client):
-    response = client.get("/session_request")
+    response = client.get("/api/sessions")
 
     assert response.status_code == 401
     assert response.get_json() == {"error": "Authentication required"}
 
-    response = client.post("/session_post", json={"session_id": 1})
+    response = client.get("/api/sessions/1")
     assert response.status_code == 401
     assert response.get_json() == {"error": "Authentication required"}
 
 
 def test_question_and_cat_routes_require_authentication(client):
-    assert client.get("/cat_request").status_code == 401
-    assert client.post("/question_post", json={}).status_code == 401
-    assert client.post("/question_submit", json={"attempt_id": "abc", "answers": {}}).status_code == 401
+    assert client.get("/api/categories").status_code == 401
+    assert client.post("/api/questions", json={}).status_code == 401
+    assert client.post("/api/attempts/submit", json={"attempt_id": "abc", "answers": {}}).status_code == 401
 
 
 def test_question_post_rejects_invalid_payload(client):
     _login(client)
-    response = client.post("/question_post", json={})
+    response = client.post("/api/questions", json={})
 
     assert response.status_code == 400
     assert "Invalid payload" in response.get_json()["error"]
@@ -137,7 +138,7 @@ def test_question_post_rejects_too_many_courses(client):
         }
     }
 
-    response = client.post("/question_post", json=payload)
+    response = client.post("/api/questions", json=payload)
     assert response.status_code == 400
     assert "Too many courses" in response.get_json()["error"]
 
@@ -152,7 +153,7 @@ def test_question_post_rejects_invalid_course_code_length(client):
         }
     }
 
-    response = client.post("/question_post", json=payload)
+    response = client.post("/api/questions", json=payload)
     assert response.status_code == 400
     assert response.get_json() == {"error": "Invalid course code"}
 
@@ -178,7 +179,7 @@ def test_question_post_rejects_too_many_categories_for_course(client, monkeypatc
         }
     }
 
-    response = client.post("/question_post", json=payload)
+    response = client.post("/api/questions", json=payload)
     assert response.status_code == 400
     assert "Too many categories" in response.get_json()["error"]
 
@@ -203,7 +204,7 @@ def test_question_post_rejects_invalid_category_name_length(client, monkeypatch)
         }
     }
 
-    response = client.post("/question_post", json=payload)
+    response = client.post("/api/questions", json=payload)
     assert response.status_code == 400
     assert "Invalid category name" in response.get_json()["error"]
 
@@ -228,7 +229,7 @@ def test_question_post_rejects_invalid_requested_count(client, monkeypatch):
         }
     }
 
-    response = client.post("/question_post", json=payload)
+    response = client.post("/api/questions", json=payload)
     assert response.status_code == 400
     assert "Invalid requested count" in response.get_json()["error"]
 
@@ -253,7 +254,7 @@ def test_question_post_rejects_requested_count_above_per_category_limit(client, 
         }
     }
 
-    response = client.post("/question_post", json=payload)
+    response = client.post("/api/questions", json=payload)
     assert response.status_code == 400
     assert "Requested count too high" in response.get_json()["error"]
 
@@ -296,7 +297,7 @@ def test_question_post_rejects_total_questions_above_limit(client, monkeypatch):
         }
     }
 
-    response = client.post("/question_post", json=payload)
+    response = client.post("/api/questions", json=payload)
     assert response.status_code == 400
     assert "Total questions requested exceeds limit" in response.get_json()["error"]
 
@@ -326,7 +327,7 @@ def test_question_post_rejects_unknown_category_for_course(client, monkeypatch):
         }
     }
 
-    response = client.post("/question_post", json=payload)
+    response = client.post("/api/questions", json=payload)
     assert response.status_code == 400
     assert "Unknown category for course" in response.get_json()["error"]
 
@@ -367,7 +368,7 @@ def test_question_post_returns_questions_for_valid_request(client, monkeypatch):
             }
         }
     }
-    response = client.post("/question_post", json=payload)
+    response = client.post("/api/questions", json=payload)
 
     assert response.status_code == 200
     response_json = response.get_json()
@@ -448,7 +449,7 @@ def test_question_post_returns_attempt_id_for_multiple_courses_and_categories(
         }
     }
 
-    response = client.post("/question_post", json=payload)
+    response = client.post("/api/questions", json=payload)
 
     assert response.status_code == 200
     response_json = response.get_json()
@@ -507,7 +508,7 @@ def test_question_post_rejects_zero_total_questions(client, monkeypatch):
         }
     }
 
-    response = client.post("/question_post", json=payload)
+    response = client.post("/api/questions", json=payload)
 
     assert response.status_code == 400
     assert "At least one question must be requested" in response.get_json()["error"]
@@ -529,7 +530,7 @@ def test_question_post_rejects_unknown_course_code(client, monkeypatch):
             }
         }
     }
-    response = client.post("/question_post", json=payload)
+    response = client.post("/api/questions", json=payload)
 
     assert response.status_code == 400
     assert "Unknown course code" in response.get_json()["error"]
@@ -551,7 +552,7 @@ def test_question_post_rejects_invalid_category_map(client, monkeypatch):
             }
         }
     }
-    response = client.post("/question_post", json=payload)
+    response = client.post("/api/questions", json=payload)
 
     assert response.status_code == 400
     assert "Invalid category map" in response.get_json()["error"]
@@ -590,7 +591,7 @@ def test_question_post_rejects_request_over_available_count(client, monkeypatch)
             }
         }
     }
-    response = client.post("/question_post", json=payload)
+    response = client.post("/api/questions", json=payload)
 
     assert response.status_code == 400
     assert "only 1 available" in response.get_json()["error"]
@@ -620,9 +621,9 @@ def test_question_post_rejects_invalid_template_configuration(client, monkeypatc
         lambda session, course_id, category_id, limit: [
             {
                 "id": "qt-invalid",
-                "template": "Dose for {weight} and {missing}",
+                "template": "Dose for {weight}",
                 "variables": {"weight": {"min": 60, "max": 60, "decimals": 0}},
-                "formula": "weight * 2",
+                "formula": "weight / (weight - 60)",
                 "course_id": course_id,
                 "category_id": category_id,
             }
@@ -638,7 +639,7 @@ def test_question_post_rejects_invalid_template_configuration(client, monkeypatc
             }
         }
     }
-    response = client.post("/question_post", json=payload)
+    response = client.post("/api/questions", json=payload)
 
     assert response.status_code == 400
     assert "Invalid question template configuration" in response.get_json()["error"]
@@ -664,7 +665,7 @@ def test_question_post_returns_json_for_unexpected_server_error(client, monkeypa
         }
     }
 
-    response = client.post("/question_post", json=payload)
+    response = client.post("/api/questions", json=payload)
 
     assert response.status_code == 500
     assert response.get_json() == {"error": "Internal server error"}
@@ -682,7 +683,7 @@ def test_cat_request_returns_course_category_map(client, monkeypatch):
         ),
     )
 
-    response = client.get("/cat_request")
+    response = client.get("/api/categories")
 
     assert response.status_code == 200
     assert response.get_json() == {
@@ -700,7 +701,7 @@ def test_cat_request_returns_course_category_map(client, monkeypatch):
 
 def test_question_submit_requires_attempt_id(client):
     _login(client)
-    response = client.post("/question_submit", json={"answers": {}})
+    response = client.post("/api/attempts/submit", json={"answers": {}})
 
     assert response.status_code == 400
     assert "attempt_id" in response.get_json()["error"]
@@ -709,7 +710,7 @@ def test_question_submit_requires_attempt_id(client):
 def test_question_submit_requires_answers_object(client):
     _login(client)
     response = client.post(
-        "/question_submit",
+        "/api/attempts/submit",
         json={"attempt_id": "attempt-1", "answers": []},
     )
 
@@ -720,7 +721,7 @@ def test_question_submit_requires_answers_object(client):
 def test_question_submit_returns_404_for_missing_attempt(client):
     _login(client)
     response = client.post(
-        "/question_submit",
+        "/api/attempts/submit",
         json={"attempt_id": "missing", "answers": {}},
     )
 
@@ -736,11 +737,12 @@ def test_question_submit_rejects_attempt_owned_by_other_user(client):
         user_id=2,
         course_id=7,
         category_id=42,
+        category_ids=[42],
         question_snapshots={"q1": {"id": "q1", "is_scored": False}},
     )
 
     response = client.post(
-        "/question_submit",
+        "/api/attempts/submit",
         json={"attempt_id": attempt_id, "answers": {}},
     )
 
@@ -756,11 +758,12 @@ def test_question_submit_rejects_attempt_without_questions(client):
         user_id=1,
         course_id=7,
         category_id=42,
+        category_ids=[42],
         question_snapshots={},
     )
 
     response = client.post(
-        "/question_submit",
+        "/api/attempts/submit",
         json={"attempt_id": attempt_id, "answers": {}},
     )
 
@@ -776,12 +779,13 @@ def test_question_submit_rejects_attempt_missing_metadata(client):
         user_id=1,
         course_id=7,
         category_id=42,
+        category_ids=[42],
         question_snapshots={"q1": {"id": "q1", "is_scored": False}},
     )
     qr._pending._mem[attempt_id]["course_id"] = None
 
     response = client.post(
-        "/question_submit",
+        "/api/attempts/submit",
         json={"attempt_id": attempt_id, "answers": {}},
     )
 
@@ -798,6 +802,7 @@ def test_question_submit_returns_500_when_persist_fails(client, monkeypatch):
         user_id=1,
         course_id=7,
         category_id=42,
+        category_ids=[42],
         question_snapshots={
             "q1": {
                 "id": "q1",
@@ -815,7 +820,7 @@ def test_question_submit_returns_500_when_persist_fails(client, monkeypatch):
     )
 
     response = client.post(
-        "/question_submit",
+        "/api/attempts/submit",
         json={"attempt_id": attempt_id, "answers": {"q1": 10}},
     )
 
@@ -831,6 +836,7 @@ def test_question_submit_grades_and_persists_session(client, app_module):
         user_id=1,
         course_id=7,
         category_id=42,
+        category_ids=[42],
         question_snapshots={
             "q1": {
                 "id": "q1",
@@ -848,7 +854,7 @@ def test_question_submit_grades_and_persists_session(client, app_module):
     )
 
     response = client.post(
-        "/question_submit",
+        "/api/attempts/submit",
         json={
             "attempt_id": attempt_id,
             "answers": {
@@ -888,6 +894,7 @@ def test_grade_question_returns_404_for_expired_attempt(client):
         user_id=1,
         course_id=1,
         category_id=1,
+        category_ids=[1],
         question_snapshots={
             "q1": {"id": "q1", "correct_answer": 5, "tolerance": 0}
         },
@@ -895,7 +902,7 @@ def test_grade_question_returns_404_for_expired_attempt(client):
     qr._pending._mem[attempt_id]["created_at"] = time.time() - 7200
 
     response = client.post(
-        "/grade_question",
+        "/api/questions/grade",
         json={"attempt_id": attempt_id, "question_id": "q1", "user_answer": "5"},
     )
 
@@ -911,6 +918,7 @@ def test_grade_question_uses_snapshot_unit_when_correct_answer_is_numeric(client
         user_id=1,
         course_id=7,
         category_id=42,
+        category_ids=[42],
         question_snapshots={
             "q1": {
                 "id": "q1",
@@ -923,7 +931,7 @@ def test_grade_question_uses_snapshot_unit_when_correct_answer_is_numeric(client
     )
 
     response = client.post(
-        "/grade_question",
+        "/api/questions/grade",
         json={
             "attempt_id": attempt_id,
             "question_id": "q1",
@@ -947,7 +955,7 @@ def test_session_request_returns_authenticated_user_sessions(client, monkeypatch
         lambda _session, user_id: [{"id": 5, "user_id": user_id, "score": "87.50"}],
     )
 
-    response = client.get("/session_request")
+    response = client.get("/api/sessions")
 
     assert response.status_code == 200
     assert response.get_json() == {
@@ -965,7 +973,7 @@ def test_session_post_returns_only_user_owned_session(client, monkeypatch):
         lambda _session, user_id, session_id: {"id": session_id, "user_id": user_id},
     )
 
-    response = client.post("/session_post", json={"session_id": 12})
+    response = client.get("/api/sessions/12")
 
     assert response.status_code == 200
     assert response.get_json() == {
@@ -977,9 +985,9 @@ def test_session_post_returns_only_user_owned_session(client, monkeypatch):
 def test_session_post_rejects_invalid_or_missing_session_id(client):
     _login(client)
 
-    response = client.post("/session_post", json={})
+    response = client.get("/api/sessions/0")
     assert response.status_code == 400
-    assert "session_post requires a positive integer session_id" in response.get_json()["error"]
+    assert "session_id must be a positive integer" in response.get_json()["error"]
 
 
 def test_session_post_returns_404_for_non_owned_session(client, monkeypatch):
@@ -991,7 +999,7 @@ def test_session_post_returns_404_for_non_owned_session(client, monkeypatch):
         lambda _session, _user_id, _session_id: None,
     )
 
-    response = client.post("/session_post", json={"session_id": 99})
+    response = client.get("/api/sessions/99")
     assert response.status_code == 404
     assert response.get_json() == {"error": "Session not found for authenticated user"}
 
@@ -1001,7 +1009,7 @@ def test_session_post_returns_404_for_non_owned_session(client, monkeypatch):
 def test_grade_question_requires_attempt_id(client):
     _login(client)
     response = client.post(
-        "/grade_question",
+        "/api/questions/grade",
         json={"question_id": "q1", "user_answer": "5"},
     )
 
@@ -1012,7 +1020,7 @@ def test_grade_question_requires_attempt_id(client):
 def test_grade_question_requires_question_id(client):
     _login(client)
     response = client.post(
-        "/grade_question",
+        "/api/questions/grade",
         json={"attempt_id": "some-attempt", "user_answer": "5"},
     )
 
@@ -1022,7 +1030,7 @@ def test_grade_question_requires_question_id(client):
 
 def test_grade_question_requires_auth(client):
     response = client.post(
-        "/grade_question",
+        "/api/questions/grade",
         json={"attempt_id": "a", "question_id": "q1", "user_answer": "5"},
     )
 
@@ -1032,7 +1040,7 @@ def test_grade_question_requires_auth(client):
 def test_grade_question_returns_404_for_missing_attempt(client):
     _login(client)
     response = client.post(
-        "/grade_question",
+        "/api/questions/grade",
         json={"attempt_id": "nonexistent", "question_id": "q1", "user_answer": "5"},
     )
 
@@ -1048,13 +1056,14 @@ def test_grade_question_returns_403_for_attempt_owned_by_other_user(client):
         user_id=99,
         course_id=1,
         category_id=1,
+        category_ids=[1],
         question_snapshots={
             "q1": {"id": "q1", "correct_answer": 5, "tolerance": 0}
         },
     )
 
     response = client.post(
-        "/grade_question",
+        "/api/questions/grade",
         json={"attempt_id": attempt_id, "question_id": "q1", "user_answer": "5"},
     )
 
@@ -1070,13 +1079,14 @@ def test_grade_question_returns_404_for_unknown_question_id(client):
         user_id=1,
         course_id=1,
         category_id=1,
+        category_ids=[1],
         question_snapshots={
             "q1": {"id": "q1", "correct_answer": 5, "tolerance": 0}
         },
     )
 
     response = client.post(
-        "/grade_question",
+        "/api/questions/grade",
         json={
             "attempt_id": attempt_id,
             "question_id": "missing-q",
@@ -1096,6 +1106,7 @@ def test_grade_question_returns_correct_for_matching_answer(client):
         user_id=1,
         course_id=1,
         category_id=1,
+        category_ids=[1],
         question_snapshots={
             "q1": {
                 "id": "q1",
@@ -1107,7 +1118,7 @@ def test_grade_question_returns_correct_for_matching_answer(client):
     )
 
     response = client.post(
-        "/grade_question",
+        "/api/questions/grade",
         json={"attempt_id": attempt_id, "question_id": "q1", "user_answer": "10.3"},
     )
 
@@ -1128,6 +1139,7 @@ def test_grade_question_returns_incorrect_for_wrong_answer(client):
         user_id=1,
         course_id=1,
         category_id=1,
+        category_ids=[1],
         question_snapshots={
             "q1": {
                 "id": "q1",
@@ -1139,7 +1151,7 @@ def test_grade_question_returns_incorrect_for_wrong_answer(client):
     )
 
     response = client.post(
-        "/grade_question",
+        "/api/questions/grade",
         json={"attempt_id": attempt_id, "question_id": "q1", "user_answer": "99"},
     )
 
@@ -1157,6 +1169,7 @@ def test_grade_question_validates_unit_when_expected(client):
         user_id=1,
         course_id=1,
         category_id=1,
+        category_ids=[1],
         question_snapshots={
             "q1": {
                 "id": "q1",
@@ -1170,7 +1183,7 @@ def test_grade_question_validates_unit_when_expected(client):
 
     # correct value, correct unit
     response = client.post(
-        "/grade_question",
+        "/api/questions/grade",
         json={"attempt_id": attempt_id, "question_id": "q1", "user_answer": "5 ml"},
     )
     assert response.status_code == 200
@@ -1181,7 +1194,7 @@ def test_grade_question_validates_unit_when_expected(client):
 
     # correct value, wrong unit
     response2 = client.post(
-        "/grade_question",
+        "/api/questions/grade",
         json={"attempt_id": attempt_id, "question_id": "q1", "user_answer": "5 mg"},
     )
     assert response2.status_code == 200

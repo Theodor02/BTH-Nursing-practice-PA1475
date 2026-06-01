@@ -98,7 +98,7 @@ _MASTERY_STUB = [
 
 def _login(client):
     """Establish an authenticated session in the test client."""
-    resp = client.post("/login", headers={"Authorization": "Bearer faketoken"})
+    resp = client.post("/api/auth/login", headers={"Authorization": "Bearer faketoken"})
     assert resp.status_code == 200, f"Login failed: {resp.get_json()}"
 
 
@@ -110,7 +110,7 @@ def test_admin_overview_returns_200_with_all_keys(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_overview_stats", lambda s, f, t: _OVERVIEW_STUB)
 
-    resp = client.get("/admin/stats/overview")
+    resp = client.get("/api/admin/stats/overview")
 
     assert resp.status_code == 200
     data = resp.get_json()
@@ -132,7 +132,7 @@ def test_admin_overview_default_dates_are_forwarded(client, monkeypatch):
         return _OVERVIEW_STUB
 
     monkeypatch.setattr(sr, "get_admin_overview_stats", capture)
-    client.get("/admin/stats/overview")
+    client.get("/api/admin/stats/overview")
 
     assert "from_dt" in captured
     assert "to_dt" in captured
@@ -148,7 +148,7 @@ def test_admin_overview_explicit_date_range_forwarded(client, monkeypatch):
         return _OVERVIEW_STUB
 
     monkeypatch.setattr(sr, "get_admin_overview_stats", capture)
-    client.get("/admin/stats/overview?from_date=2024-01-01&to_date=2024-03-31")
+    client.get("/api/admin/stats/overview?from_date=2024-01-01&to_date=2024-03-31")
 
     assert captured["from_dt"].year == 2024 and captured["from_dt"].month == 1
     assert captured["to_dt"].year == 2024 and captured["to_dt"].month == 3
@@ -159,7 +159,7 @@ def test_admin_overview_bad_from_date_returns_400(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_overview_stats", lambda s, f, t: _OVERVIEW_STUB)
 
-    resp = client.get("/admin/stats/overview?from_date=not-a-date")
+    resp = client.get("/api/admin/stats/overview?from_date=not-a-date")
 
     assert resp.status_code == 400
     assert "error" in resp.get_json()
@@ -169,7 +169,7 @@ def test_admin_overview_bad_to_date_returns_400(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_overview_stats", lambda s, f, t: _OVERVIEW_STUB)
 
-    resp = client.get("/admin/stats/overview?to_date=2024-99-01")
+    resp = client.get("/api/admin/stats/overview?to_date=2024-99-01")
 
     assert resp.status_code == 400
 
@@ -177,7 +177,7 @@ def test_admin_overview_bad_to_date_returns_400(client, monkeypatch):
 def test_admin_overview_requires_auth_when_debug_off(app_module, monkeypatch):
     monkeypatch.setenv("ADMIN_DEBUG_ALL", "false")
     with app_module.app.test_client() as c:
-        resp = c.get("/admin/stats/overview")
+        resp = c.get("/api/admin/stats/overview")
     assert resp.status_code == 401
 
 
@@ -189,7 +189,7 @@ def test_admin_courses_returns_200_with_courses_key(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_course_stats", lambda s, f, t: _COURSE_STUB)
 
-    resp = client.get("/admin/stats/courses")
+    resp = client.get("/api/admin/stats/courses")
 
     assert resp.status_code == 200
     data = resp.get_json()
@@ -202,7 +202,7 @@ def test_admin_courses_empty_list_returned(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_course_stats", lambda s, f, t: [])
 
-    resp = client.get("/admin/stats/courses")
+    resp = client.get("/api/admin/stats/courses")
 
     assert resp.status_code == 200
     assert resp.get_json()["courses"] == []
@@ -212,7 +212,7 @@ def test_admin_courses_bad_date_returns_400(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_course_stats", lambda s, f, t: [])
 
-    resp = client.get("/admin/stats/courses?to_date=2024-99-99")
+    resp = client.get("/api/admin/stats/courses?to_date=2024-99-99")
 
     assert resp.status_code == 400
 
@@ -221,7 +221,7 @@ def test_admin_courses_period_in_response(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_course_stats", lambda s, f, t: [])
 
-    resp = client.get("/admin/stats/courses?from_date=2024-01-01&to_date=2024-06-30")
+    resp = client.get("/api/admin/stats/courses?from_date=2024-01-01&to_date=2024-06-30")
 
     data = resp.get_json()
     assert data["period"]["from"] == "2024-01-01"
@@ -236,7 +236,7 @@ def test_admin_categories_returns_200_with_linked_courses(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_category_stats", lambda s, f, t, **kw: _CATEGORY_STUB)
 
-    resp = client.get("/admin/stats/categories")
+    resp = client.get("/api/admin/stats/categories")
 
     assert resp.status_code == 200
     data = resp.get_json()
@@ -255,7 +255,7 @@ def test_admin_categories_course_id_forwarded(client, monkeypatch):
         return []
 
     monkeypatch.setattr(sr, "get_admin_category_stats", capture)
-    client.get("/admin/stats/categories?course_id=3")
+    client.get("/api/admin/stats/categories?course_id=3")
 
     assert captured.get("course_id") == 3
 
@@ -269,7 +269,7 @@ def test_admin_categories_no_course_id_sends_none(client, monkeypatch):
         return []
 
     monkeypatch.setattr(sr, "get_admin_category_stats", capture)
-    client.get("/admin/stats/categories")
+    client.get("/api/admin/stats/categories")
 
     assert captured.get("course_id") is None
 
@@ -278,7 +278,7 @@ def test_admin_categories_invalid_course_id_returns_400(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_category_stats", lambda s, f, t, **kw: [])
 
-    resp = client.get("/admin/stats/categories?course_id=abc")
+    resp = client.get("/api/admin/stats/categories?course_id=abc")
 
     assert resp.status_code == 400
     assert "error" in resp.get_json()
@@ -288,7 +288,7 @@ def test_admin_categories_negative_course_id_returns_400(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_category_stats", lambda s, f, t, **kw: [])
 
-    resp = client.get("/admin/stats/categories?course_id=-1")
+    resp = client.get("/api/admin/stats/categories?course_id=-1")
 
     assert resp.status_code == 400
 
@@ -297,7 +297,7 @@ def test_admin_categories_bad_date_returns_400(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_category_stats", lambda s, f, t, **kw: [])
 
-    resp = client.get("/admin/stats/categories?from_date=bad")
+    resp = client.get("/api/admin/stats/categories?from_date=bad")
 
     assert resp.status_code == 400
 
@@ -310,7 +310,7 @@ def test_admin_questions_returns_200_with_difficulty_field(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_question_stats", lambda s, f, t, **kw: _QUESTION_STUB)
 
-    resp = client.get("/admin/stats/questions")
+    resp = client.get("/api/admin/stats/questions")
 
     assert resp.status_code == 200
     data = resp.get_json()
@@ -331,7 +331,7 @@ def test_admin_questions_sort_by_attempts_forwarded(client, monkeypatch):
         return []
 
     monkeypatch.setattr(sr, "get_admin_question_stats", capture)
-    client.get("/admin/stats/questions?sort_by=attempts")
+    client.get("/api/admin/stats/questions?sort_by=attempts")
 
     assert captured.get("sort_by") == "attempts"
 
@@ -345,7 +345,7 @@ def test_admin_questions_default_sort_is_accuracy(client, monkeypatch):
         return []
 
     monkeypatch.setattr(sr, "get_admin_question_stats", capture)
-    client.get("/admin/stats/questions")
+    client.get("/api/admin/stats/questions")
 
     assert captured.get("sort_by") == "accuracy"
 
@@ -354,7 +354,7 @@ def test_admin_questions_invalid_sort_by_returns_400(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_question_stats", lambda s, f, t, **kw: [])
 
-    resp = client.get("/admin/stats/questions?sort_by=invalid")
+    resp = client.get("/api/admin/stats/questions?sort_by=invalid")
 
     assert resp.status_code == 400
     assert "sort_by" in resp.get_json()["error"]
@@ -369,7 +369,7 @@ def test_admin_questions_limit_forwarded(client, monkeypatch):
         return []
 
     monkeypatch.setattr(sr, "get_admin_question_stats", capture)
-    client.get("/admin/stats/questions?limit=25")
+    client.get("/api/admin/stats/questions?limit=25")
 
     assert captured.get("limit") == 25
 
@@ -378,7 +378,7 @@ def test_admin_questions_limit_too_large_returns_400(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_question_stats", lambda s, f, t, **kw: [])
 
-    resp = client.get("/admin/stats/questions?limit=201")
+    resp = client.get("/api/admin/stats/questions?limit=201")
 
     assert resp.status_code == 400
     assert "limit" in resp.get_json()["error"]
@@ -388,7 +388,7 @@ def test_admin_questions_limit_zero_returns_400(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_question_stats", lambda s, f, t, **kw: [])
 
-    resp = client.get("/admin/stats/questions?limit=0")
+    resp = client.get("/api/admin/stats/questions?limit=0")
 
     assert resp.status_code == 400
 
@@ -402,7 +402,7 @@ def test_admin_questions_course_and_category_filter_forwarded(client, monkeypatc
         return []
 
     monkeypatch.setattr(sr, "get_admin_question_stats", capture)
-    client.get("/admin/stats/questions?course_id=2&category_id=5")
+    client.get("/api/admin/stats/questions?course_id=2&category_id=5")
 
     assert captured.get("course_id") == 2
     assert captured.get("category_id") == 5
@@ -412,7 +412,7 @@ def test_admin_questions_invalid_category_id_returns_400(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_question_stats", lambda s, f, t, **kw: [])
 
-    resp = client.get("/admin/stats/questions?category_id=abc")
+    resp = client.get("/api/admin/stats/questions?category_id=abc")
 
     assert resp.status_code == 400
 
@@ -421,7 +421,7 @@ def test_admin_questions_bad_date_returns_400(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_question_stats", lambda s, f, t, **kw: [])
 
-    resp = client.get("/admin/stats/questions?from_date=2024-13-01")
+    resp = client.get("/api/admin/stats/questions?from_date=2024-13-01")
 
     assert resp.status_code == 400
 
@@ -430,7 +430,7 @@ def test_admin_questions_empty_result(client, monkeypatch):
     import routes.stats_routes as sr
     monkeypatch.setattr(sr, "get_admin_question_stats", lambda s, f, t, **kw: [])
 
-    resp = client.get("/admin/stats/questions")
+    resp = client.get("/api/admin/stats/questions")
 
     assert resp.status_code == 200
     assert resp.get_json()["questions"] == []
@@ -443,9 +443,9 @@ def test_admin_questions_empty_result(client, monkeypatch):
 def test_user_overview_returns_200_with_all_keys(client, monkeypatch):
     _login(client)
     import routes.stats_routes as sr
-    monkeypatch.setattr(sr, "get_user_overview_stats", lambda s, uid: _USER_OVERVIEW_STUB)
+    monkeypatch.setattr(sr, "get_user_overview_stats", lambda s, uid, from_dt=None, to_dt=None: _USER_OVERVIEW_STUB)
 
-    resp = client.get("/stats/overview")
+    resp = client.get("/api/stats/overview")
 
     assert resp.status_code == 200
     data = resp.get_json()
@@ -458,9 +458,9 @@ def test_user_overview_returns_200_with_all_keys(client, monkeypatch):
 def test_user_overview_user_id_in_response(client, monkeypatch):
     _login(client)
     import routes.stats_routes as sr
-    monkeypatch.setattr(sr, "get_user_overview_stats", lambda s, uid: _USER_OVERVIEW_STUB)
+    monkeypatch.setattr(sr, "get_user_overview_stats", lambda s, uid, from_dt=None, to_dt=None: _USER_OVERVIEW_STUB)
 
-    resp = client.get("/stats/overview")
+    resp = client.get("/api/stats/overview")
 
     data = resp.get_json()
     assert isinstance(data["user_id"], int)
@@ -468,7 +468,7 @@ def test_user_overview_user_id_in_response(client, monkeypatch):
 
 def test_user_overview_returns_401_when_not_logged_in(app_module):
     with app_module.app.test_client() as c:
-        resp = c.get("/stats/overview")
+        resp = c.get("/api/stats/overview")
     assert resp.status_code == 401
 
 
@@ -479,9 +479,9 @@ def test_user_overview_returns_401_when_not_logged_in(app_module):
 def test_user_mastery_returns_200_with_courses_key(client, monkeypatch):
     _login(client)
     import routes.stats_routes as sr
-    monkeypatch.setattr(sr, "get_user_mastery_stats", lambda s, uid: _MASTERY_STUB)
+    monkeypatch.setattr(sr, "get_user_mastery_stats", lambda s, uid, from_dt=None, to_dt=None: _MASTERY_STUB)
 
-    resp = client.get("/stats/mastery")
+    resp = client.get("/api/stats/mastery")
 
     assert resp.status_code == 200
     data = resp.get_json()
@@ -493,9 +493,9 @@ def test_user_mastery_returns_200_with_courses_key(client, monkeypatch):
 def test_user_mastery_empty_courses(client, monkeypatch):
     _login(client)
     import routes.stats_routes as sr
-    monkeypatch.setattr(sr, "get_user_mastery_stats", lambda s, uid: [])
+    monkeypatch.setattr(sr, "get_user_mastery_stats", lambda s, uid, from_dt=None, to_dt=None: [])
 
-    resp = client.get("/stats/mastery")
+    resp = client.get("/api/stats/mastery")
 
     assert resp.status_code == 200
     assert resp.get_json()["courses"] == []
@@ -503,7 +503,7 @@ def test_user_mastery_empty_courses(client, monkeypatch):
 
 def test_user_mastery_returns_401_when_not_logged_in(app_module):
     with app_module.app.test_client() as c:
-        resp = c.get("/stats/mastery")
+        resp = c.get("/api/stats/mastery")
     assert resp.status_code == 401
 
 
@@ -517,7 +517,7 @@ def test_user_activity_returns_200_with_days_key(client, monkeypatch):
     fake_days = [{"date": f"2024-01-{i+1:02d}", "session_count": 0} for i in range(98)]
     monkeypatch.setattr(sr, "get_user_activity_stats", lambda s, uid, **kw: fake_days)
 
-    resp = client.get("/stats/activity")
+    resp = client.get("/api/stats/activity")
 
     assert resp.status_code == 200
     data = resp.get_json()
@@ -535,7 +535,7 @@ def test_user_activity_default_weeks_is_14(client, monkeypatch):
         return []
 
     monkeypatch.setattr(sr, "get_user_activity_stats", capture)
-    client.get("/stats/activity")
+    client.get("/api/stats/activity")
 
     assert captured.get("weeks") == 14
 
@@ -550,7 +550,7 @@ def test_user_activity_custom_weeks_forwarded(client, monkeypatch):
         return []
 
     monkeypatch.setattr(sr, "get_user_activity_stats", capture)
-    client.get("/stats/activity?weeks=4")
+    client.get("/api/stats/activity?weeks=4")
 
     assert captured.get("weeks") == 4
 
@@ -565,7 +565,7 @@ def test_user_activity_weeks_zero_clamped_to_1(client, monkeypatch):
         return []
 
     monkeypatch.setattr(sr, "get_user_activity_stats", capture)
-    resp = client.get("/stats/activity?weeks=0")
+    resp = client.get("/api/stats/activity?weeks=0")
 
     assert resp.status_code == 200
     assert captured.get("weeks") == 1
@@ -581,7 +581,7 @@ def test_user_activity_weeks_over_52_clamped(client, monkeypatch):
         return []
 
     monkeypatch.setattr(sr, "get_user_activity_stats", capture)
-    resp = client.get("/stats/activity?weeks=100")
+    resp = client.get("/api/stats/activity?weeks=100")
 
     assert resp.status_code == 200
     assert captured.get("weeks") == 52
@@ -597,12 +597,12 @@ def test_user_activity_invalid_weeks_defaults_to_14(client, monkeypatch):
         return []
 
     monkeypatch.setattr(sr, "get_user_activity_stats", capture)
-    client.get("/stats/activity?weeks=notanumber")
+    client.get("/api/stats/activity?weeks=notanumber")
 
     assert captured.get("weeks") == 14
 
 
 def test_user_activity_returns_401_when_not_logged_in(app_module):
     with app_module.app.test_client() as c:
-        resp = c.get("/stats/activity")
+        resp = c.get("/api/stats/activity")
     assert resp.status_code == 401

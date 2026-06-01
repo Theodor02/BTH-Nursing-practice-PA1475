@@ -36,6 +36,7 @@ def app_module(monkeypatch):
 
     monkeypatch.setenv("FLASK_SECRET_KEY", "test-secret-key")
     monkeypatch.setenv("ADMIN_DEBUG_ALL", "true")
+    monkeypatch.setenv("APP_ENV", "test")
 
     fake_init_db = types.ModuleType("logic.database.init.init_db")
 
@@ -49,7 +50,22 @@ def app_module(monkeypatch):
         def execute(self, *_args, **_kwargs):
             if self.should_fail:
                 raise RuntimeError("database unavailable")
-            return 1
+            _self = self
+
+            class _FakeResult:
+                def scalar(self_r):
+                    return None
+
+                def scalars(self_r):
+                    return self_r
+
+                def unique(self_r):
+                    return self_r
+
+                def all(self_r):
+                    return []
+
+            return _FakeResult()
 
         def get(self, model, id, **kwargs):
             if self.should_fail:
@@ -190,8 +206,8 @@ def app_module(monkeypatch):
     fake_stats.get_admin_course_stats = lambda session, f, t: []
     fake_stats.get_admin_category_stats = lambda session, f, t, **kw: []
     fake_stats.get_admin_question_stats = lambda session, f, t, **kw: []
-    fake_stats.get_user_overview_stats = lambda session, uid: {}
-    fake_stats.get_user_mastery_stats = lambda session, uid: []
+    fake_stats.get_user_overview_stats = lambda session, uid, from_dt=None, to_dt=None: {}
+    fake_stats.get_user_mastery_stats = lambda session, uid, from_dt=None, to_dt=None: []
     fake_stats.get_user_activity_stats = lambda session, uid, **kw: []
 
     monkeypatch.setitem(

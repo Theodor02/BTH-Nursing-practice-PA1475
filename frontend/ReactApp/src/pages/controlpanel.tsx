@@ -673,6 +673,8 @@ export default function controlpanel(){
 
                         if (data?.arr && Array.isArray(data.arr)) {
                             type = 1; // list type
+                        } else if (Array.isArray(data) && (data.length === 0 || typeof data[0] === 'number')) {
+                            type = 1; // plain numeric array e.g. [20]
                         } else if (typeof data === 'string' || (Array.isArray(data) && typeof data[0] === 'string')) {
                             type = 3; // name type
                         } else if (data?.formula) {
@@ -689,10 +691,11 @@ export default function controlpanel(){
                             decimals: data?.decimals ?? null,
                             step: data?.step ?? null,
 
-                            // FIXED
                             arr: Array.isArray(data?.arr)
                                 ? data.arr.map(String)
-                                : null,
+                                : Array.isArray(data) && (data.length === 0 || typeof data[0] === 'number')
+                                    ? (data as number[]).map(String)
+                                    : null,
 
                             depends_on: data?.depends_on
                                 ? Array.isArray(data.depends_on)
