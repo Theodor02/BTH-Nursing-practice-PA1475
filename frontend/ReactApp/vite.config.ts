@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
+    allowedHosts: ['www.lakemedelsberakning.com', 'lakemedelsberakning.com'],
     proxy: {
       '/login': process.env.BACKEND_URL ?? 'http://localhost:5000',
       '/logout': process.env.BACKEND_URL ?? 'http://localhost:5000',
