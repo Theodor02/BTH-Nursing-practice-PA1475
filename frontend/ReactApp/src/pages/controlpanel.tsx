@@ -110,7 +110,7 @@ interface FullQuestion {
     answer_type?: string;
     answer_min?: number;
     answer_max?: number;
-    round_answer?: boolean;
+    round_answer?: number;
     round_to_unit?: string;
 }
 
@@ -656,7 +656,7 @@ export default function controlpanel(){
             setQuestionUnit(questionData.unit || "");
             setQuestionTolerance(questionData.tolerance?.toString() || "");
             setQuestionAnswerType(questionData.answer_type || "numeric");
-            setQuestionRoundAnswer(questionData.round_answer || false);
+            setQuestionRoundAnswer(typeof questionData.round_answer === "number" ? questionData.round_answer : 10);
             setQuestionRoundAnswerTime(questionData.round_to_unit || "min");
             setQuestionAnswerMin(questionData.answer_min !== undefined && questionData.answer_min !== null ? questionData.answer_min.toString() : "");
             setQuestionAnswerMax(questionData.answer_max !== undefined && questionData.answer_max !== null ? questionData.answer_max.toString() : "");
@@ -734,7 +734,7 @@ export default function controlpanel(){
             setQuestionUnit("");
             setQuestionTolerance("");
             setQuestionAnswerType("numeric");
-            setQuestionRoundAnswer(false);
+            setQuestionRoundAnswer(10);
             setQuestionAnswerMin("");
             setQuestionAnswerMax("");
             setQuestionVariables({});
@@ -1272,7 +1272,7 @@ export default function controlpanel(){
         setQuestionUnit("");
         setQuestionTolerance("");
         setQuestionAnswerType("numeric");
-        setQuestionRoundAnswer(false);
+        setQuestionRoundAnswer(10);
         setQuestionAnswerMin("");
         setQuestionAnswerMax("");
         setQuestionVariables({});
@@ -1356,10 +1356,12 @@ export default function controlpanel(){
     }
 
     function validate_limits():boolean{
+        const min = parseFloat(questionAnswerMin);
+        const max = parseFloat(questionAnswerMax);
         let bad = 0;
         for(let i = 0; i < 100; i++){
-            const result = eval_formula(questionFormula, sample_variables());
-            if((questionAnswerMax != "" && result > questionAnswerMax) || (questionAnswerMin != "" && result < questionAnswerMin)) bad++;
+            const result = parseFloat(eval_formula(questionFormula, sample_variables()));
+            if (isNaN(result) || (!isNaN(max) && result > max) || (!isNaN(min) && result < min)) bad++;
         }
         return(bad < 25);
     }
@@ -1730,7 +1732,7 @@ export default function controlpanel(){
                 unit: full.unit,
                 tolerance: full.tolerance,
                 answer_type: full.answer_type ?? "numeric",
-                round_answer: full.round_answer ?? false,
+                round_answer: full.round_answer ?? 10,
                 answer_min: full.answer_min ?? null,
                 answer_max: full.answer_max ?? null,
                 hints: full.hints ?? [],
@@ -1875,8 +1877,10 @@ export default function controlpanel(){
                     String(value)
                 );
             });
-            const factor = questionRoundAnswer ** 10;
-            return String(Math.round((parseFloat(eval((expression))) * factor) / factor).toFixed(10));
+            const raw = parseFloat(eval(expression));
+            if (questionAnswerType !== "numeric") return String(raw);
+            const factor = 10 ** questionRoundAnswer;
+            return String((Math.round(raw * factor) / factor).toFixed(questionRoundAnswer));
         } catch {
             return "?";
         }
@@ -2720,8 +2724,11 @@ export default function controlpanel(){
                                                     <input
                                                         id="rounding"
                                                         type="number"
-                                                        checked={questionRoundAnswer} 
-                                                        onChange={(e) => setQuestionRoundAnswer(e)} 
+                                                        min={0}
+                                                        max={10}
+                                                        step={1}
+                                                        value={questionRoundAnswer} 
+                                                        onChange={(e) => setQuestionRoundAnswer(Math.max(0, parseInt(e.target.value) || 0))} 
                                                         style={{ width: 'auto', marginBottom: 0 }}
                                                     />
                                                 </div>
