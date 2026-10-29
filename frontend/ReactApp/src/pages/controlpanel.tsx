@@ -366,7 +366,7 @@ export default function controlpanel(){
     const [questionUnit, setQuestionUnit] = useState<string>("");
     const [questionTolerance, setQuestionTolerance] = useState<string>("");
     const [questionAnswerType, setQuestionAnswerType] = useState<string>("numeric");
-    const [questionRoundAnswer, setQuestionRoundAnswer] = useState<boolean>(false);
+    const [questionRoundAnswer, setQuestionRoundAnswer] = useState<number>(10);
     const [questionRoundAnswerTime, setQuestionRoundAnswerTime] = useState<string>("min");
     const [questionAnswerMin, setQuestionAnswerMin] = useState<string>("");
     const [questionAnswerMax, setQuestionAnswerMax] = useState<string>("");
@@ -1875,7 +1875,8 @@ export default function controlpanel(){
                     String(value)
                 );
             });
-            return String(questionRoundAnswer ? Math.round(parseFloat(eval(expression).toFixed(10))) : parseFloat(eval(expression).toFixed(10)));
+            const factor = questionRoundAnswer ** 10;
+            return String(Math.round((parseFloat(eval((expression))) * factor) / factor).toFixed(10));
         } catch {
             return "?";
         }
@@ -2714,13 +2715,13 @@ export default function controlpanel(){
                                             {questionAnswerType === "numeric" && (
                                                 <div className="label-and-box">
                                                     <label htmlFor="rounding">
-                                                        Avrunda svar till heltal
+                                                        Avrunda till decimal (0 = heltal, 1 = 1 decimal, ...)
                                                     </label>
                                                     <input
                                                         id="rounding"
-                                                        type="checkbox" 
+                                                        type="number"
                                                         checked={questionRoundAnswer} 
-                                                        onChange={(e) => setQuestionRoundAnswer(e.target.checked)} 
+                                                        onChange={(e) => setQuestionRoundAnswer(e)} 
                                                         style={{ width: 'auto', marginBottom: 0 }}
                                                     />
                                                 </div>
