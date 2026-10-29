@@ -1,7 +1,7 @@
 #!/bin/bash
 
 URL="http://localhost:8080"
-PROJECT_DIR="/home/bth/NursingPractice/BTH-Nursing-practice-PA1475"
+PROJECT_DIR="/home/bth/BTH-Nursing-practice-PA1475"
 RESTORE_SCRIPT="$PROJECT_DIR/scripts/restore.sh"
 LOG_DIR="$PROJECT_DIR/logs"
 LOG_FILE="$LOG_DIR/health_log_$(date +"%Y-%m-%d_%H-%M-%S").txt"

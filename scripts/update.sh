@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Konfiguration
-PROJECT_DIR="/home/bth/NursingPractice/BTH-Nursing-practice-PA1475"
+PROJECT_DIR="/home/bth/BTH-Nursing-practice-PA1475"
 BACKUP_DIR="$PROJECT_DIR/backups"
 LOG_DIR="$PROJECT_DIR/logs/update_logs"
 DATE=$(date +"%Y-%m-%d_%H-%M-%S")

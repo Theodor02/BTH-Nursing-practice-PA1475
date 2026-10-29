@@ -1,5 +1,5 @@
 #!/bin/bash
-PROJECT_DIR="/home/bth/NursingPractice/BTH-Nursing-practice-PA1475"
+PROJECT_DIR="/home/bth/BTH-Nursing-practice-PA1475"
 DB_CONTAINER="bth-nursing-practice-pa1475-db-1"
 LATEST_BACKUP=$(ls -t "$PROJECT_DIR/backups/"*.sql | head -1)
 
