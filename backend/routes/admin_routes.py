@@ -218,7 +218,7 @@ def get_entity(entity_type, entity_id):
         "answer_min",        -- float | null
         "answer_max",        -- float | null
         "tolerance_percent", -- float | null
-        "round_answer",      -- bool | null
+        "round_answer",      -- int (0-10 decimals) | null
         "round_to_unit"      -- "s" | "min" | "h" | "d" | null
       }
 
@@ -476,7 +476,7 @@ def batch_mutate():
                 unit (string), tolerance (float), hints (any), link (string),
                 active (bool), course_ids (int[])
       Answer-behaviour fields (all optional):
-        round_answer      bool   – Round correct answer to nearest integer before grading (numeric only).
+        round_answer      int   – Number of decimals to round the correct answer to (0 = integer, numeric only).
         answer_type       string – "numeric" (default) | "time_of_day" (answer entered as HH:MM,
                                   stored/compared as minutes since midnight; use unit "kl") |
                                   "duration" (answer entered as compound string e.g. "1h 20min",
@@ -670,7 +670,7 @@ _QUESTION_SCALAR_FIELDS = (
     # Core fields
     'id', 'template', 'variables', 'formula', 'unit', 'tolerance', 'hints', 'link', 'active',
     # Answer-behaviour fields (all optional):
-    #   round_answer      bool   – Round correct answer to nearest integer before grading/display.
+    #   round_answer      int   – Decimals to round the correct answer to before grading/displaying (0 = integer).
     #   answer_type       str    – "numeric" (default) | "time_of_day" | "duration"
     #   answer_min        float  – Min acceptable generated correct answer; gen retries if below.
     #   answer_max        float  – Max acceptable generated correct answer; gen retries if above.
@@ -695,6 +695,13 @@ def _validate_question_body(body):
         raise ValueError(
             f"round_to_unit must be one of: {', '.join(sorted(_VALID_ROUND_TO_UNITS))}"
         )
+    round_answer = body.get('round_answer')
+    if round_answer is not None and (
+        isinstance(round_answer, bool)
+        or not isinstance(round_answer, int)
+        or not 0 <= round_answer <= 10
+    ):
+        raise ValueError("round_answer must be an integer between 0 and 10, or null")
     unit = body.get('unit')
     if unit and not is_known_unit(unit):
         raise ValueError(

@@ -144,8 +144,8 @@ def _ensure_question_template_schema():
     with db.engine.begin() as conn:
         if "round_answer" not in columns:
             conn.execute(text(
-                "ALTER TABLE question_templates ADD COLUMN round_answer BOOLEAN DEFAULT FALSE"
-            ))
+                "ALTER TABLE question_templates ADD COLUMN round_answer INTEGER"
+            )) 
         if "answer_type" not in columns:
             conn.execute(text(
                 "ALTER TABLE question_templates ADD COLUMN answer_type VARCHAR(20) DEFAULT 'numeric'"

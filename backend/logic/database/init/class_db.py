@@ -179,15 +179,14 @@ class QuestionTemplate(db.Model):
     )
 
     # Answer-behaviour fields
-    # round_answer: round the correct answer to the nearest integer before grading/display.
+    # round_answer: round the correct answer to the nearest decimal before grading/display.
     # answer_type:  "numeric" (default) | "time_of_day" (user enters HH:MM; stored as minutes since midnight).
     # answer_min:   minimum acceptable generated correct answer; question gen retries if below.
     # answer_max:   maximum acceptable generated correct answer; question gen retries if above.
     # tolerance_percent: tolerance as a % of the correct answer (overrides absolute tolerance when set).
     round_answer = db.Column(
-        Boolean,
+        db.Integer,
         nullable=True,
-        server_default=db.literal(False)
     )
 
     answer_type = db.Column(

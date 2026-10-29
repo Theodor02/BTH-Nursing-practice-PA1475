@@ -43,6 +43,18 @@ def _to_int_if_whole(value: float):
     int_val = int(value)
     return int_val if value == int_val else value
 
+def normalize_round_decimals(value):
+    """Return the number of decimals to round to, or None for no rounding.
+    Handles legacy boolean values from old snapshots
+    True -> 0 (round to integer), False -> None (no rounding)"""
+    if value is None or isinstance(value, bool):
+        return 0 if value else None
+    try:
+        decimals = int(value)
+    except (TypeError, ValueError):
+        return None
+    return min(max(decimals, 0), 10)
+
 
 def parse_numeric_answer(value):
     """Parse a plain numeric value; return float or None."""

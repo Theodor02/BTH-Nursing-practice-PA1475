@@ -14,7 +14,7 @@ if the result falls outside ``answer_min`` / ``answer_max`` bounds.
 import uuid
 from decimal import Decimal
 
-from logic.answer_utils import compute_effective_tolerance, _to_int_if_whole
+from logic.answer_utils import compute_effective_tolerance, _to_int_if_whole, normalize_round_decimals
 from logic.question_gen.question_gen_helpers import (
     evaluate_formula,
     generate_variables,
@@ -65,7 +65,7 @@ def generate_question_instance(template):
     # (admin_routes._validate_template_consistency_from_state); skipping here
     # avoids surfacing 400s to students from malformed admin edits.
 
-    round_answer = bool(template.get("round_answer", False))
+    round_answer = normalize_round_decimals(template.get("round_answer"))
     answer_type = template.get("answer_type") or "numeric"
     round_to_unit = template.get("round_to_unit") or None
     answer_min = _to_float_or_none(template.get("answer_min"))
@@ -86,8 +86,10 @@ def generate_question_instance(template):
                 )
             continue
 
-        if round_answer:
-            correct_answer = _to_int_if_whole(round(float(correct_answer)))
+        # Default to 2 decimals when no rounding is set (previous behaviour).
+        decimals = round_answer if round_answer is not None else 2
+        if answer_type == "numeric":
+            correct_answer = _to_int_if_whole(round(float(correct_answer), decimals))
 
         # For duration/time_of_day: round to the specified unit granularity.
         # Duration values are in seconds; time_of_day values are in minutes.

@@ -366,7 +366,7 @@ export default function controlpanel(){
     const [questionUnit, setQuestionUnit] = useState<string>("");
     const [questionTolerance, setQuestionTolerance] = useState<string>("");
     const [questionAnswerType, setQuestionAnswerType] = useState<string>("numeric");
-    const DEFAULT_ROUND = 10;
+    const DEFAULT_ROUND = 2;
     const [questionRoundAnswer, setQuestionRoundAnswer] = useState<number>(DEFAULT_ROUND);
     const [questionRoundAnswerTime, setQuestionRoundAnswerTime] = useState<string>("min");
     const [questionAnswerMin, setQuestionAnswerMin] = useState<string>("");

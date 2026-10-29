@@ -360,4 +360,4 @@ def evaluate_formula(formula, variables):
         safe_globals,
         safe_locals,
     )
-    return _to_int_if_whole(round(_coerce_number(result), 2))
+    return _to_int_if_whole(round(_coerce_number(result), 10))

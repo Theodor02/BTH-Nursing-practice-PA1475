@@ -18,6 +18,7 @@ from logic.answer_utils import (
     parse_numeric_answer,
     parse_numeric_with_unit,
     parse_time_of_day,
+    normalize_round_decimals
 )
 
 _DURATION_ROUND_STEPS = {"s": 1, "min": 60, "h": 3600, "d": 86400}
@@ -95,7 +96,7 @@ def grade_attempt(question_snapshots: dict, answers: dict) -> GradeResult:
             answered_count += 1
 
         answer_type = snapshot.get("answer_type", "numeric") or "numeric"
-        round_answer = bool(snapshot.get("round_answer", False))
+        round_answer = normalize_round_decimals(snapshot.get("round_answer"))
         round_to_unit = snapshot.get("round_to_unit") or None
 
         snapshot['user_answer'] = raw_answer
@@ -181,10 +182,10 @@ def grade_attempt(question_snapshots: dict, answers: dict) -> GradeResult:
 
         scored_count += 1
 
-        if round_answer:
+        if round_answer is not None:
             if user_number is not None:
-                user_number = round(user_number)
-            correct_number = round(correct_number)
+                user_number = round(user_number, round_answer)
+            correct_number = round(correct_number, round_answer)
 
         tolerance_value = compute_effective_tolerance(
             correct_number=correct_number,
