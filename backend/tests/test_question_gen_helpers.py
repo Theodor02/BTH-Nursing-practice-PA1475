@@ -23,6 +23,23 @@ def test_generate_variables_supports_choice_list():
     assert variables["name"] in {"Anna", "Ali", "Maria"}
 
 
+def test_generate_variables_picks_from_editor_arr_not_min_max_range():
+    config = {"dose": {"arr": ["300", "600"], "min": 300, "max": 600}}
+    seen = {generate_variables(config)["dose"] for _ in range(200)}
+    assert seen == {300, 600}
+
+
+def test_generate_variables_arr_parses_decimals_and_skips_blanks():
+    config = {"dose": {"arr": ["2.5", " ", "", 10], "min": 2.5, "max": 10}}
+    seen = {generate_variables(config)["dose"] for _ in range(200)}
+    assert seen == {2.5, 10}
+
+
+def test_generate_variables_rejects_empty_arr():
+    with pytest.raises(ValueError, match="choice list cannot be empty"):
+        generate_variables({"dose": {"arr": [""], "min": None, "max": None}})
+
+
 def test_generate_variables_rejects_invalid_decimals_range():
     with pytest.raises(ValueError, match="decimals must be between 0 and 4"):
         generate_variables({"dose": {"min": 1, "max": 2, "decimals": 5}})

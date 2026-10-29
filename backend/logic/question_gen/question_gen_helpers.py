@@ -43,6 +43,14 @@ def _step_choices(min_val, max_val, step):
     return [round(min_val + i * step, dp) for i in range(n + 1)]
 
 
+def _parse_list_value(value):
+    """Convert a list choice to a number when possible ("300" -> 300)."""
+    try:
+        return _to_int_if_whole(_coerce_number(value))
+    except ValueError:
+        return value
+
+
 def _random_range(min_val, max_val, decimals=0):
     """Generate a random number within range with specified decimals.
 
@@ -113,6 +121,22 @@ def generate_variables(variables_config):
             )
 
         if "depends_on" in config:
+            continue
+
+        # The admin editor saves list variables as {"arr": [...], "min", "max"};
+        # min/max are only informational, so pick from arr instead.
+        if "arr" in config:
+            choices = [
+                _parse_list_value(value)
+                for value in config["arr"] or []
+                if str(value).strip() != ""
+            ]
+            if not choices:
+                raise ValueError(
+                    f"Variable {variable_name} choice list "
+                    f"cannot be empty"
+                )
+            generated[variable_name] = random.choice(choices)
             continue
 
         min_value = config.get("min")
