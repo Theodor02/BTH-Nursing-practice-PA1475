@@ -58,7 +58,7 @@
         ],
         "link": "https://www.fass.se/LIF/product?userType=0&nplId=19760608000014",
         "active": true,
-        "round_answer": true
+        "round_answer": 0
     },
     {
         "category_id": 1,
@@ -75,7 +75,7 @@
         "hints": [],
         "link": "https://www.fass.se/LIF/product?userType=0&nplId=19760608000014",
         "active": true,
-        "round_answer": true
+        "round_answer": 0
     },
     {
         "category_id": 1,
@@ -564,7 +564,7 @@
         ],
         "link": "https://www.fass.se/LIF/product?userType=0&nplId=20070824000016",
         "active": true,
-        "round_answer": true
+        "round_answer": 0
     },
     {
         "category_id": 3,
@@ -728,7 +728,7 @@
         ],
         "link": "https://www.fass.se/LIF/product?userType=0&nplId=19900316000160",
         "active": true,
-        "round_answer": true
+        "round_answer": 0
     },
     {
         "category_id": 5,
@@ -751,7 +751,7 @@
         ],
         "link": "https://www.fass.se/LIF/product?userType=0&nplId=19900316000160",
         "active": true,
-        "round_answer": true
+        "round_answer": 0
     },
     {
         "category_id": 5,
@@ -790,7 +790,7 @@
         ],
         "link": "https://www.fass.se/LIF/product?userType=0&nplId=20040607004883",
         "active": true,
-        "round_answer": true
+        "round_answer": 0
     },
     {
         "category_id": 5,
@@ -810,7 +810,7 @@
         ],
         "link": "https://www.fass.se/LIF/product?userType=0&nplId=20040607004883",
         "active": true,
-        "round_answer": true
+        "round_answer": 0
     },
     {
         "category_id": 5,
@@ -828,7 +828,7 @@
         ],
         "link": "",
         "active": true,
-        "round_answer": true
+        "round_answer": 0
     },
     {
         "category_id": 5,
@@ -846,7 +846,7 @@
         ],
         "link": "",
         "active": true,
-        "round_answer": true
+        "round_answer": 0
     },
     {
         "category_id": 5,
@@ -865,7 +865,7 @@
         ],
         "link": "",
         "active": true,
-        "round_answer": true
+        "round_answer": 0
     },
     {
         "category_id": 5,
