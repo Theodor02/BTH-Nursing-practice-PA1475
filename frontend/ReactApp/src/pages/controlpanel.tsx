@@ -366,7 +366,8 @@ export default function controlpanel(){
     const [questionUnit, setQuestionUnit] = useState<string>("");
     const [questionTolerance, setQuestionTolerance] = useState<string>("");
     const [questionAnswerType, setQuestionAnswerType] = useState<string>("numeric");
-    const [questionRoundAnswer, setQuestionRoundAnswer] = useState<number>(10);
+    const DEFAULT_ROUND = 10;
+    const [questionRoundAnswer, setQuestionRoundAnswer] = useState<number>(DEFAULT_ROUND);
     const [questionRoundAnswerTime, setQuestionRoundAnswerTime] = useState<string>("min");
     const [questionAnswerMin, setQuestionAnswerMin] = useState<string>("");
     const [questionAnswerMax, setQuestionAnswerMax] = useState<string>("");
@@ -656,7 +657,7 @@ export default function controlpanel(){
             setQuestionUnit(questionData.unit || "");
             setQuestionTolerance(questionData.tolerance?.toString() || "");
             setQuestionAnswerType(questionData.answer_type || "numeric");
-            setQuestionRoundAnswer(typeof questionData.round_answer === "number" ? questionData.round_answer : 10);
+            setQuestionRoundAnswer(typeof questionData.round_answer === "number" ? questionData.round_answer : DEFAULT_ROUND);
             setQuestionRoundAnswerTime(questionData.round_to_unit || "min");
             setQuestionAnswerMin(questionData.answer_min !== undefined && questionData.answer_min !== null ? questionData.answer_min.toString() : "");
             setQuestionAnswerMax(questionData.answer_max !== undefined && questionData.answer_max !== null ? questionData.answer_max.toString() : "");
@@ -734,7 +735,7 @@ export default function controlpanel(){
             setQuestionUnit("");
             setQuestionTolerance("");
             setQuestionAnswerType("numeric");
-            setQuestionRoundAnswer(10);
+            setQuestionRoundAnswer(DEFAULT_ROUND);
             setQuestionAnswerMin("");
             setQuestionAnswerMax("");
             setQuestionVariables({});
@@ -1272,7 +1273,7 @@ export default function controlpanel(){
         setQuestionUnit("");
         setQuestionTolerance("");
         setQuestionAnswerType("numeric");
-        setQuestionRoundAnswer(10);
+        setQuestionRoundAnswer(DEFAULT_ROUND);
         setQuestionAnswerMin("");
         setQuestionAnswerMax("");
         setQuestionVariables({});
@@ -1732,7 +1733,7 @@ export default function controlpanel(){
                 unit: full.unit,
                 tolerance: full.tolerance,
                 answer_type: full.answer_type ?? "numeric",
-                round_answer: full.round_answer ?? 10,
+                round_answer: full.round_answer ?? DEFAULT_ROUND,
                 answer_min: full.answer_min ?? null,
                 answer_max: full.answer_max ?? null,
                 hints: full.hints ?? [],
@@ -2722,13 +2723,14 @@ export default function controlpanel(){
                                                         Avrunda till decimal (0 = heltal, 1 = 1 decimal, ...)
                                                     </label>
                                                     <input
+                                                        onFocus={(e) => e.target.select()}
                                                         id="rounding"
                                                         type="number"
                                                         min={0}
                                                         max={10}
                                                         step={1}
                                                         value={questionRoundAnswer} 
-                                                        onChange={(e) => setQuestionRoundAnswer(Math.max(0, parseInt(e.target.value) || 0))} 
+                                                        onChange={(e) => setQuestionRoundAnswer(Math.min(10, Math.max(0, parseInt(e.target.value) || 0)))} 
                                                         style={{ width: 'auto', marginBottom: 0 }}
                                                     />
                                                 </div>
